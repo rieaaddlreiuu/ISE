@@ -15,6 +15,32 @@ export type ProblemDetail = {
     commentary: string;
     reviewMemo: string;
     checklist: string[];
+    assets: Array<{
+        id: string;
+        name: string;
+        kind: string;
+        dimensions: string;
+        sizeLabel: string;
+        updatedAt: string;
+        usageHint: string;
+        markdownSnippet: string;
+    }>;
+    ai: {
+        difficulty: {
+            current: string;
+            suggested: string;
+            confidence: string;
+            rationale: string;
+            lastRunAt: string;
+        };
+        commentaryDraft: {
+            statusLabel: string;
+            summary: string;
+            preview: string;
+            saveHint: string;
+            lastRunAt: string;
+        };
+    };
     timeline: Array<{
         label: string;
         value: string;
@@ -35,7 +61,7 @@ const problemDetails: Record<string, ProblemDetail> = {
         destinations: [],
         tags: ["整数", "場合分け", "最大最小"],
         statement:
-            "正の整数 a, b が a + b = 12 を満たしている。ab の最大値と最小値を求め、そのときの a, b の組をすべて答えなさい。",
+            "正の整数 a, b が $a + b = 12$ を満たしている。ab の最大値と最小値を求め、そのときの a, b の組をすべて答えなさい。",
         answer:
             "ab の最大値は 36、最小値は 11。最大値は (a, b) = (6, 6) のとき、最小値は (1, 11), (11, 1) のときにとる。",
         commentary:
@@ -43,6 +69,46 @@ const problemDetails: Record<string, ProblemDetail> = {
         reviewMemo:
             "図表なしで成立。模範解答は『一覧表で確認する解法』と『平方完成で説明する解法』の 2 本立てにする想定。",
         checklist: ["問題文の言い回し確認", "模範解答整備", "公開先の選定"],
+        assets: [
+            {
+                id: "asset-01",
+                name: "整数条件の表.png",
+                kind: "補助表",
+                dimensions: "1280 x 720",
+                sizeLabel: "248 KB",
+                updatedAt: "2026-04-11 17:55",
+                usageHint: "場合分けの確認表として解説末尾に差し込む想定",
+                markdownSnippet: "![整数条件の表](/problems/ALG-201/assets/asset-01)",
+            },
+            {
+                id: "asset-02",
+                name: "放物線メモ.svg",
+                kind: "グラフ草案",
+                dimensions: "960 x 640",
+                sizeLabel: "84 KB",
+                updatedAt: "2026-04-10 09:10",
+                usageHint: "平方完成で説明する版の図として使用候補",
+                markdownSnippet: "![放物線メモ](/problems/ALG-201/assets/asset-02)",
+            },
+        ],
+        ai: {
+            difficulty: {
+                current: "標準",
+                suggested: "標準",
+                confidence: "0.82",
+                rationale:
+                    "二次関数の見通しと整数条件の整理が必要だが、誘導なしでも高校基礎の範囲で完結するため標準と判定。",
+                lastRunAt: "2026-04-12 10:40",
+            },
+            commentaryDraft: {
+                statusLabel: "下書きあり",
+                summary: "整数条件の扱いを前面に出した解説案が生成済み。",
+                preview:
+                    "AI 下書きでは、$ab=a(12-a)$ への変形後に、頂点だけでなく整数条件による端点確認も必要であることを段階的に説明している。",
+                saveHint: "生成結果を保存すると、現在の講評メモとは別の解説下書きとして保持する想定。",
+                lastRunAt: "2026-04-12 10:43",
+            },
+        },
         timeline: [
             { label: "作成日", value: "2026-04-08 10:15" },
             { label: "最終更新", value: "2026-04-11 18:20" },
@@ -70,6 +136,36 @@ const problemDetails: Record<string, ProblemDetail> = {
         reviewMemo:
             "公開済み。授業配布版では補助図を追加済み。Web 版でも同じ図版に差し替える可能性あり。",
         checklist: ["Web 掲載図版の差し替え", "解説末尾の補足確認"],
+        assets: [
+            {
+                id: "asset-01",
+                name: "ベクトル図版-v2.png",
+                kind: "本番図版",
+                dimensions: "1600 x 900",
+                sizeLabel: "412 KB",
+                updatedAt: "2026-04-10 15:10",
+                usageHint: "Web 掲載版と授業配布版で共通利用",
+                markdownSnippet: "![ベクトル図版-v2](/problems/MTH-084/assets/asset-01)",
+            },
+        ],
+        ai: {
+            difficulty: {
+                current: "やや難",
+                suggested: "やや難",
+                confidence: "0.77",
+                rationale:
+                    "証明の起点を自力で設定する必要があり、内積の意味理解まで求めるため、標準より一段階高い難度と判断。",
+                lastRunAt: "2026-04-09 13:20",
+            },
+            commentaryDraft: {
+                statusLabel: "保存済み",
+                summary: "公開済み解説に反映済みの AI 草案あり。",
+                preview:
+                    "AI 草案では『垂直を示すために内積 0 を目標にする』という証明の入口を最初に固定してから展開している。",
+                saveHint: "現在は公開済み版に採用済みのため、保存すると新しい版として追加される想定。",
+                lastRunAt: "2026-04-09 13:26",
+            },
+        },
         timeline: [
             { label: "作成日", value: "2026-03-28 09:00" },
             { label: "公開日", value: "2026-04-05 08:30" },
@@ -97,6 +193,24 @@ const problemDetails: Record<string, ProblemDetail> = {
         reviewMemo:
             "設問文の字数制限を 35 字にする案あり。本文抜粋との整合確認が未了。",
         checklist: ["本文抜粋の確定", "字数制限の決定"],
+        assets: [],
+        ai: {
+            difficulty: {
+                current: "標準",
+                suggested: "標準",
+                confidence: "0.69",
+                rationale:
+                    "字数制限内で根拠を要約する力が求められるが、本文に即して処理できれば解法は素直であるため標準相当。",
+                lastRunAt: "2026-04-09 20:15",
+            },
+            commentaryDraft: {
+                statusLabel: "未生成",
+                summary: "まだ AI 解説は生成していない。",
+                preview: "本文抜粋が確定してから生成する想定。",
+                saveHint: "生成後に保存すると、手動メモとは分離した解説下書きとして扱う。",
+                lastRunAt: "未実行",
+            },
+        },
         timeline: [
             { label: "作成日", value: "2026-04-06 14:20" },
             { label: "レビュー依頼", value: "2026-04-09 18:00" },
@@ -123,6 +237,23 @@ function createFallbackProblemDetail(problemId: string): ProblemDetail {
         commentary: "問題詳細画面のレイアウト確認用のフォールバックデータです。",
         reviewMemo: "実データ接続時に差し替えます。",
         checklist: ["実データ接続", "公開先設定"],
+        assets: [],
+        ai: {
+            difficulty: {
+                current: "未設定",
+                suggested: "未評価",
+                confidence: "-",
+                rationale: "AI 評価の実行前です。",
+                lastRunAt: "未実行",
+            },
+            commentaryDraft: {
+                statusLabel: "未生成",
+                summary: "AI による解説下書きはまだありません。",
+                preview: "生成後にここへプレビューを表示します。",
+                saveHint: "保存導線はモック表示です。",
+                lastRunAt: "未実行",
+            },
+        },
         timeline: [
             { label: "作成日", value: "2026-04-12 00:00" },
             { label: "最終更新", value: "2026-04-12 00:00" },

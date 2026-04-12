@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ProblemAiPanel } from "@/components/problems/problemAiPanel";
+import { ProblemAssetsPanel } from "@/components/problems/problemAssetsPanel";
 import { PageHeader } from "@/components/layout/pageHeader";
 import { Card, CardHeader } from "@/components/ui/card";
 import { MarkdownTex } from "@/components/ui/markdownTex";
@@ -125,6 +127,16 @@ export default async function ProblemDetailPage(props: PageProps<"/problems/[pro
                     </PlainSection>
                 </div>
             ),
+        },
+        {
+            id: "assets",
+            label: "画像",
+            content: <ProblemAssetsPanel problemId={problem.id} assets={problem.assets} />,
+        },
+        {
+            id: "ai",
+            label: "AI",
+            content: <ProblemAiPanel ai={problem.ai} />,
         },
         {
             id: "history",

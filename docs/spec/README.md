@@ -14,6 +14,8 @@
   - 画面仕様、作業フロー、出力
 - [mvp.md](./mvp.md)
   - MVP、非機能要件、確定事項
+- [next-steps.md](./next-steps.md)
+  - 現状UIから見た不足UIと次の実装候補
 
 ## 現時点の要点
 
