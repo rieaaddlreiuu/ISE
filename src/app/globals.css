@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "katex/dist/katex.min.css";
 
 :root {
   --background: #09111f;
@@ -47,4 +48,90 @@ button {
 .problems-route textarea::selection {
   background: #93c5fd;
   color: #0f172a;
+}
+
+.markdown-preview {
+  line-height: 1.8;
+}
+
+.markdown-preview > * + * {
+  margin-top: 0.9rem;
+}
+
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3,
+.markdown-preview h4 {
+  color: #0f172a;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.markdown-preview h1 {
+  font-size: 1.25rem;
+}
+
+.markdown-preview h2 {
+  font-size: 1.125rem;
+}
+
+.markdown-preview h3,
+.markdown-preview h4 {
+  font-size: 1rem;
+}
+
+.markdown-preview p,
+.markdown-preview li,
+.markdown-preview blockquote {
+  color: #334155;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  margin-left: 1.4rem;
+}
+
+.markdown-preview ul {
+  list-style: disc;
+}
+
+.markdown-preview ol {
+  list-style: decimal;
+}
+
+.markdown-preview blockquote {
+  border-left: 3px solid #cbd5e1;
+  padding-left: 0.9rem;
+}
+
+.markdown-preview code {
+  border-radius: 0.125rem;
+  background: #e2e8f0;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.9em;
+}
+
+.markdown-preview pre {
+  overflow-x: auto;
+  background: #0f172a;
+  padding: 0.9rem 1rem;
+  color: #e2e8f0;
+}
+
+.markdown-preview pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.markdown-preview table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.markdown-preview th,
+.markdown-preview td {
+  border: 1px solid #cbd5e1;
+  padding: 0.5rem 0.65rem;
+  text-align: left;
 }

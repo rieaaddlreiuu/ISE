@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { PageHeader } from "@/components/layout/pageHeader";
+import { MarkdownTexTextarea } from "@/components/problems/markdownTexTextarea";
 import { Card, CardHeader } from "@/components/ui/card";
 import type { ProblemEditScreenData } from "@/mocks/problemEdit";
 
@@ -80,8 +81,8 @@ export function ProblemEditScreen({ problemId, screen }: ProblemEditScreenProps)
                 <PageHeader
                     backHref="/problems"
                     backLabel="問題一覧へ戻る"
-                    title={`${form.id} の編集`}
-                    description="仮データを使った問題編集画面です。保存処理は未接続で、編集 UI と導線確認を目的にしています。"
+                    title={`${form.id} の問題編集`}
+                    description="既存の問題情報を更新するための編集画面です。入力内容はモック表示ですが、画面上の構成と導線は実運用に近い形に合わせています。"
                     meta={`Route: /problems/${problemId}/edit`}
                     className="mb-10 flex flex-col gap-4 border-b border-slate-300 pb-6 sm:flex-row sm:items-end sm:justify-between"
                     actions={
@@ -106,14 +107,14 @@ export function ProblemEditScreen({ problemId, screen }: ProblemEditScreenProps)
                     <Card className="shadow-none ring-1 ring-slate-200">
                         <CardHeader
                             title="編集フォーム"
-                            subtitle="問題情報・本文・公開設定を 1 画面で見直せる構成です。現在は mock を初期値として表示しています。"
+                            subtitle="問題の基本情報、本文、公開設定をひとつの画面で編集できます。現在はモックデータを表示しています。"
                         />
 
                         <form className="space-y-8 p-5 sm:p-8">
                             <ProblemEditSection
                                 label="Basics"
                                 title="基本情報"
-                                description="識別情報と分類を編集します。問題一覧との整合が取れるよう、ID・科目・難度を同じ粒度で扱います。"
+                                description="問題 ID、状態、科目、難易度などの基本項目を更新します。"
                             >
                                 <div className="grid gap-6 md:grid-cols-2">
                                     <label className="block">
@@ -131,8 +132,8 @@ export function ProblemEditScreen({ problemId, screen }: ProblemEditScreenProps)
                                         <select name="status" defaultValue={form.status} className={lineSelectClassName()}>
                                             <option value="draft">下書き</option>
                                             <option value="review">レビュー中</option>
-                                            <option value="ready">公開準備</option>
-                                            <option value="published">公開済み</option>
+                                            <option value="ready">公開準備完了</option>
+                                            <option value="published">公開中</option>
                                         </select>
                                     </label>
                                 </div>
@@ -161,7 +162,7 @@ export function ProblemEditScreen({ problemId, screen }: ProblemEditScreenProps)
                                     </label>
 
                                     <label className="block">
-                                        <span className={labelClassName()}>難度</span>
+                                        <span className={labelClassName()}>難易度</span>
                                         <select
                                             name="difficulty"
                                             defaultValue={form.difficulty}
@@ -199,45 +200,40 @@ export function ProblemEditScreen({ problemId, screen }: ProblemEditScreenProps)
                             <ProblemEditSection
                                 label="Content"
                                 title="問題内容"
-                                description="本文、解答方針、採点メモをまとめて編集します。運用上よく変わる項目を近い位置に配置しています。"
+                                description="問題文とメモ類は Markdown + TeX 記法に対応しています。プレビューで数式の表示を確認できます。"
                             >
-                                <label className="block">
-                                    <span className={labelClassName()}>問題文</span>
-                                    <textarea
-                                        name="statement"
-                                        rows={7}
-                                        defaultValue={form.statement}
-                                        className={lineTextareaClassName()}
+                                <MarkdownTexTextarea
+                                    name="statement"
+                                    label="問題文"
+                                    rows={7}
+                                    defaultValue={form.statement}
+                                    textareaClassName={lineTextareaClassName()}
+                                    previewMinHeightClassName="min-h-[180px]"
+                                />
+
+                                <div className="space-y-6">
+                                    <MarkdownTexTextarea
+                                        name="answerPolicy"
+                                        label="解答方針メモ"
+                                        rows={6}
+                                        defaultValue={form.answerPolicy}
+                                        textareaClassName={lineTextareaClassName()}
                                     />
-                                </label>
 
-                                <div className="grid gap-6 lg:grid-cols-2">
-                                    <label className="block">
-                                        <span className={labelClassName()}>解答方針メモ</span>
-                                        <textarea
-                                            name="answerPolicy"
-                                            rows={6}
-                                            defaultValue={form.answerPolicy}
-                                            className={lineTextareaClassName()}
-                                        />
-                                    </label>
-
-                                    <label className="block">
-                                        <span className={labelClassName()}>採点メモ</span>
-                                        <textarea
-                                            name="gradingMemo"
-                                            rows={6}
-                                            defaultValue={form.gradingMemo}
-                                            className={lineTextareaClassName()}
-                                        />
-                                    </label>
+                                    <MarkdownTexTextarea
+                                        name="gradingMemo"
+                                        label="採点メモ"
+                                        rows={6}
+                                        defaultValue={form.gradingMemo}
+                                        textareaClassName={lineTextareaClassName()}
+                                    />
                                 </div>
                             </ProblemEditSection>
 
                             <ProblemEditSection
                                 label="Publish"
                                 title="出典と公開設定"
-                                description="出典情報、公開メモ、配信先を編集します。公開済み問題の差し替えにも対応しやすい構成です。"
+                                description="出典情報と公開先をまとめて確認できます。公開先はモック表示です。"
                             >
                                 <label className="block">
                                     <span className={labelClassName()}>出典</span>
@@ -253,15 +249,15 @@ export function ProblemEditScreen({ problemId, screen }: ProblemEditScreenProps)
                                     <div>
                                         <div className={labelClassName()}>公開先</div>
                                         <p className={helperTextClassName()}>
-                                            この画面では保存は行わず、選択状態の UI のみ確認できます。
+                                            どの媒体に掲載するかを選択します。現在は UI のみのモックです。
                                         </p>
                                     </div>
                                     <div className="grid gap-4 sm:grid-cols-2">
                                         {[
                                             { value: "booklet", label: "冊子" },
                                             { value: "web", label: "Web" },
-                                            { value: "print", label: "印刷物" },
-                                            { value: "teacher", label: "講師用資料" },
+                                            { value: "print", label: "印刷教材" },
+                                            { value: "teacher", label: "教員用資料" },
                                         ].map((target) => (
                                             <label
                                                 key={target.value}
@@ -281,7 +277,7 @@ export function ProblemEditScreen({ problemId, screen }: ProblemEditScreenProps)
                                 </div>
 
                                 <label className="block">
-                                    <span className={labelClassName()}>運用メモ</span>
+                                    <span className={labelClassName()}>備考メモ</span>
                                     <textarea
                                         name="notes"
                                         rows={4}
@@ -305,7 +301,7 @@ export function ProblemEditScreen({ problemId, screen }: ProblemEditScreenProps)
                                     下書きに戻す
                                 </button>
                                 <span className="text-xs text-slate-500">
-                                    mock 表示のため、ボタン操作ではデータは更新されません。
+                                    モック画面のため、保存ボタンではデータは更新されません。
                                 </span>
                             </div>
                         </form>
@@ -314,7 +310,7 @@ export function ProblemEditScreen({ problemId, screen }: ProblemEditScreenProps)
 
                 <section className="mt-8">
                     <Card className="border-dashed shadow-none ring-1 ring-slate-200">
-                        <CardHeader title="現在の状態" subtitle="仮データの表示内容です。" />
+                        <CardHeader title="現在の状態" subtitle="編集対象の表示情報です。" />
                         <div className="space-y-2 p-4 text-sm leading-6 text-slate-600">
                             <p>最終更新: {form.updatedAt}</p>
                             <p>更新者: {form.editor}</p>
