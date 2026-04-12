@@ -35,5 +35,16 @@ button {
 
 ::selection {
   background: rgba(103, 232, 249, 0.28);
-  color: #f8fafc;
+  color: inherit;
+}
+
+.problem-registration-page ::selection {
+  background: #93c5fd;
+  color: #0f172a;
+}
+
+.problem-registration-page input::selection,
+.problem-registration-page textarea::selection {
+  background: #93c5fd;
+  color: #0f172a;
 }

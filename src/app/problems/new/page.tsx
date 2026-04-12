@@ -3,43 +3,12 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { PageHeader } from "@/components/layout/pageHeader";
 import { Card, CardHeader } from "@/components/ui/card";
+import { latexSnippets, recentChecks, registrationFlow } from "@/mocks/problemRegistration";
 
 export const metadata: Metadata = {
     title: "問題登録 | ISE",
     description: "問題文、解答方針、出典情報を整理して登録するための画面",
 };
-
-const registrationFlow = [
-    {
-        step: "01",
-        title: "基本情報",
-        body: "ID、教科、難度、形式を先に固定し、後工程で迷わない状態にします。",
-    },
-    {
-        step: "02",
-        title: "問題内容",
-        body: "問題文と解答メモを分けて記入し、編集時の視認性を保ちます。",
-    },
-    {
-        step: "03",
-        title: "出典と公開先",
-        body: "公開条件と出典情報を最後に確認し、そのまま保存できる形に整えます。",
-    },
-];
-
-const recentChecks = [
-    "問題文は単独で意味が通る表現にする",
-    "解答方針は採点観点と混同しない",
-    "Overleaf 用メモには整形ルールだけを書く",
-    "出典表記は公開先に合わせて粒度を揃える",
-];
-
-const latexSnippets = [
-    "\\begin{enumerate}",
-    "  \\item 条件を整理する",
-    "  \\item 解法の分岐を明示する",
-    "\\end{enumerate}",
-];
 
 function sectionLabelClassName() {
     return "text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500";
@@ -113,7 +82,7 @@ function AsideListItem({ text }: { text: string }) {
 
 export default function ProblemRegistrationPage() {
     return (
-        <main className="min-h-screen bg-[#f5f2ea] text-slate-900">
+        <main className="problem-registration-page min-h-screen bg-[#f5f2ea] text-slate-900">
             <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
                 <PageHeader
                     backHref="/"
@@ -132,7 +101,7 @@ export default function ProblemRegistrationPage() {
                     }
                 />
 
-                <section className="grid gap-8 xl:grid-cols-[minmax(0,1.7fr)_320px]">
+                <section className="grid gap-8">
                     <Card className="shadow-none ring-1 ring-slate-200">
                         <CardHeader
                             title="登録内容"
@@ -146,19 +115,6 @@ export default function ProblemRegistrationPage() {
                                 description="識別情報と分類を最初に確定させ、後続の編集対象を明確にします。"
                             >
                                 <div className="grid gap-6 md:grid-cols-2">
-                                    <label className="block">
-                                        <span className={labelClassName()}>問題ID</span>
-                                        <input
-                                            name="problemId"
-                                            defaultValue="MTH-2026-042"
-                                            className={lineFieldClassName()}
-                                            placeholder="例: ALG-2026-001"
-                                        />
-                                        <p className={helperTextClassName()}>
-                                            命名規則に従って一意になる値を入れます。
-                                        </p>
-                                    </label>
-
                                     <label className="block">
                                         <span className={labelClassName()}>登録状態</span>
                                         <select name="stage" defaultValue="draft" className={lineSelectClassName()}>
@@ -266,18 +222,6 @@ export default function ProblemRegistrationPage() {
                                     </label>
                                 </div>
 
-                                <label className="block">
-                                    <span className={labelClassName()}>LaTeX / Overleaf 用メモ</span>
-                                    <textarea
-                                        name="latexMemo"
-                                        rows={5}
-                                        defaultValue={latexSnippets.join("\n")}
-                                        className={`${lineTextareaClassName()} font-mono text-[13px]`}
-                                    />
-                                    <p className={helperTextClassName()}>
-                                        本文の編集メモとは分けて、整形に必要な情報だけを書きます。
-                                    </p>
-                                </label>
                             </RegistrationSection>
 
                             <RegistrationSection
@@ -293,16 +237,6 @@ export default function ProblemRegistrationPage() {
                                             defaultValue="自作 / 2026 春期教材向け作問"
                                             className={lineFieldClassName()}
                                             placeholder="書籍名、年度、教材名など"
-                                        />
-                                    </label>
-
-                                    <label className="block">
-                                        <span className={labelClassName()}>Overleaf 保存先</span>
-                                        <input
-                                            name="overleafPath"
-                                            defaultValue="algebra/2026-spring/set-03.tex"
-                                            className={lineFieldClassName()}
-                                            placeholder="相対パス"
                                         />
                                     </label>
                                 </div>
@@ -349,63 +283,12 @@ export default function ProblemRegistrationPage() {
                                     type="button"
                                     className="inline-flex items-center justify-center bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
                                 >
-                                    下書き保存
-                                </button>
-                                <button
-                                    type="button"
-                                    className="inline-flex items-center justify-center border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-900 hover:text-slate-950"
-                                >
-                                    公開準備へ送る
+                                    保存
                                 </button>
                                 <span className="text-xs text-slate-500">UI モックのため送信処理は未接続です。</span>
                             </div>
                         </form>
                     </Card>
-
-                    <aside className="space-y-6">
-                        <Card className="bg-[#faf7f0] shadow-none ring-1 ring-slate-200">
-                            <CardHeader
-                                title="登録の流れ"
-                                subtitle="画面の読み順と作業順が一致するように整理しています。"
-                            />
-                            <div className="space-y-4 p-5">
-                                {registrationFlow.map((item) => (
-                                    <div key={item.step} className="border-b border-slate-200 pb-4 last:border-b-0 last:pb-0">
-                                        <div className="text-[11px] font-semibold tracking-[0.2em] text-slate-500">
-                                            {item.step}
-                                        </div>
-                                        <div className="mt-2 text-sm font-semibold text-slate-900">{item.title}</div>
-                                        <p className="mt-2 text-sm leading-6 text-slate-600">{item.body}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </Card>
-
-                        <Card className="shadow-none ring-1 ring-slate-200">
-                            <CardHeader
-                                title="確認ポイント"
-                                subtitle="入力時に見る補助情報だけを右側に残しています。"
-                            />
-                            <ul className="space-y-3 p-5">
-                                {recentChecks.map((item) => (
-                                    <AsideListItem key={item} text={item} />
-                                ))}
-                            </ul>
-                        </Card>
-
-                        <Card className="bg-slate-950 text-slate-50 shadow-none ring-1 ring-slate-950">
-                            <CardHeader
-                                title="LaTeX スニペット"
-                                subtitle="Overleaf に移す前の整形メモ"
-                                right={<span className="text-xs text-slate-400">template</span>}
-                            />
-                            <div className="p-5">
-                                <pre className="overflow-x-auto text-[13px] leading-6 text-slate-200">
-                                    <code>{latexSnippets.join("\n")}</code>
-                                </pre>
-                            </div>
-                        </Card>
-                    </aside>
                 </section>
             </div>
         </main>
