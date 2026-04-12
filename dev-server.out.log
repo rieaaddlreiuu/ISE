@@ -1,0 +1,13 @@
+
+> ise@0.1.0 dev
+> next dev --webpack -H localhost
+
+â–² Next.js 16.2.3 (webpack)
+- Local:         http://localhost:3000
+- Network:       http://localhost:3000
+âœ“ Ready in 620ms
+
+â—‹ Compiling / ...
+ GET / 200 in 155ms (next.js: 10ms, application-code: 145ms)
+ƒoƒbƒ` ƒWƒ‡ƒu‚ğI—¹‚µ‚Ü‚·‚© (Y/N)? 
+[?25h

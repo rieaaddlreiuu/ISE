@@ -38,13 +38,13 @@ button {
   color: inherit;
 }
 
-.problem-registration-page ::selection {
+.problems-route ::selection {
   background: #93c5fd;
   color: #0f172a;
 }
 
-.problem-registration-page input::selection,
-.problem-registration-page textarea::selection {
+.problems-route input::selection,
+.problems-route textarea::selection {
   background: #93c5fd;
   color: #0f172a;
 }

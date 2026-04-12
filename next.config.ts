@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Use polling in dev to make file change detection more reliable on Windows.
+  watchOptions: {
+    pollIntervalMs: 300,
+  },
 };
 
 export default nextConfig;
