@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ProblemAiPanel } from "@/components/problems/problemAiPanel";
 import { ProblemAssetsPanel } from "@/components/problems/problemAssetsPanel";
+import { DeleteProblemButton } from "@/components/problems/deleteProblemButton";
 import { PageHeader } from "@/components/layout/pageHeader";
 import { Card, CardHeader } from "@/components/ui/card";
 import { MarkdownTex } from "@/components/ui/markdownTex";
 import { Tabs } from "@/components/ui/tabs";
+import { isProblemDeleted } from "@/lib/problemDeletion";
 import { getProblemDetailMock, problemDetailIds } from "@/mocks/problemDetails";
 
 function statusClassName(status: string) {
@@ -44,6 +47,12 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: PageProps<"/problems/[problemId]">): Promise<Metadata> {
     const { problemId } = await props.params;
+    if (await isProblemDeleted(problemId)) {
+        return {
+            title: "Problem not found | ISE",
+        };
+    }
+
     const problem = getProblemDetailMock(problemId);
 
     return {
@@ -54,6 +63,10 @@ export async function generateMetadata(props: PageProps<"/problems/[problemId]">
 
 export default async function ProblemDetailPage(props: PageProps<"/problems/[problemId]">) {
     const { problemId } = await props.params;
+    if (await isProblemDeleted(problemId)) {
+        notFound();
+    }
+
     const problem = getProblemDetailMock(problemId);
 
     const tabs = [
@@ -223,6 +236,7 @@ export default async function ProblemDetailPage(props: PageProps<"/problems/[pro
                             >
                                 編集
                             </Link>
+                            <DeleteProblemButton problemId={problem.id} />
                         </>
                     }
                 />

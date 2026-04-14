@@ -12,9 +12,10 @@ export type TabDefinition = {
 type TabsProperties = {
     tabs: TabDefinition[];
     initialTabId?: string;
+    framed?: boolean;
 };
 
-export function Tabs({ tabs, initialTabId }: TabsProperties) {
+export function Tabs({ tabs, initialTabId, framed = true }: TabsProperties) {
     const fallbackTabId = tabs[0]?.id ?? '';
     const [activeTabId, setActiveTabId] = useState(initialTabId ?? fallbackTabId);
 
@@ -25,7 +26,12 @@ export function Tabs({ tabs, initialTabId }: TabsProperties) {
     const activeTab = tabs.find((tab) => tab.id === activeTabId) ?? tabs[0];
 
     return (
-        <div className="overflow-hidden rounded-none bg-white shadow-sm ring-1 ring-slate-200">
+        <div
+            className={[
+                'overflow-hidden',
+                framed ? 'rounded-none bg-white shadow-sm ring-1 ring-slate-200' : '',
+            ].join(' ')}
+        >
             <div className="flex flex-wrap items-end justify-start gap-1 border-b border-slate-200 px-4 pt-3">
                 {tabs.map((tab) => {
                     const isActive = tab.id === activeTab.id;

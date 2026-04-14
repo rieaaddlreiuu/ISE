@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { DeleteProblemButton } from "@/components/problems/deleteProblemButton";
 import { PageHeader } from "@/components/layout/pageHeader";
 import { MarkdownTexTextarea } from "@/components/problems/markdownTexTextarea";
 import { Card, CardHeader } from "@/components/ui/card";
@@ -93,6 +94,7 @@ export function ProblemEditScreen({ problemId, screen }: ProblemEditScreenProps)
                             >
                                 一覧へ戻る
                             </Link>
+                            <DeleteProblemButton problemId={problemId} />
                             <button
                                 type="button"
                                 className="inline-flex items-center justify-center bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"

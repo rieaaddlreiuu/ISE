@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PageHeader } from "@/components/layout/pageHeader";
 import { Card, CardHeader, SummaryCard } from "@/components/ui/card";
 import { StyledButton } from "@/components/ui/styledButton";
@@ -19,9 +20,11 @@ function ProblemList({ items }: { items: typeof problems }) {
     return (
         <div className="space-y-3">
             {items.map((problem) => (
-                <div
+                <Link
                     key={problem.id}
-                    className="grid gap-4 rounded-none border border-slate-200 bg-slate-50 p-4 md:grid-cols-[1.45fr_0.8fr_0.95fr_0.75fr]"
+                    href={`/problems/${problem.id}`}
+                    aria-label={`${problem.id} detail`}
+                    className="grid gap-4 rounded-none border border-slate-200 bg-slate-50 p-4 transition hover:border-slate-300 hover:bg-white md:grid-cols-[1.45fr_0.8fr_0.95fr_0.75fr]"
                 >
                     <div>
                         <div className="flex flex-wrap items-center gap-2">
@@ -73,7 +76,7 @@ function ProblemList({ items }: { items: typeof problems }) {
                         <div className="text-xs text-slate-500">最終更新</div>
                         <div className="mt-1 text-slate-900">{problem.updatedAt}</div>
                     </div>
-                </div>
+                </Link>
             ))}
         </div>
     );

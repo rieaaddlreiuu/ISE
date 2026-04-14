@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { PageHeader } from '@/components/layout/pageHeader';
 import { Card, CardHeader, SummaryCard } from '@/components/ui/card';
 import { Tabs } from '@/components/ui/tabs';
-import { problemList, problemSummaryCards } from '@/mocks/problems';
+import { filterDeletedProblems } from '@/lib/problemDeletion';
+import { problemList as allProblemList, problemSummaryCards } from '@/mocks/problems';
 
 export const metadata: Metadata = {
     title: '問題一覧 | ISE',
@@ -100,7 +101,8 @@ function ProblemsTable({ items }: { items: typeof problemList }) {
     );
 }
 
-export default function ProblemsPage() {
+export default async function ProblemsPage() {
+    const problemList = await filterDeletedProblems(allProblemList);
     const tabs = [
         {
             id: 'all',
