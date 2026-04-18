@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ProblemEditScreen } from '@/components/problems/problemEditScreen';
+import { ProblemPublishEditScreen } from '@/components/problems/problemPublishEditScreen';
 import { isProblemDeleted } from '@/lib/problemDeletion';
 import { getProblemEditScreenData } from '@/mocks/problemEdit';
 
-type ProblemEditPageProps = PageProps<'/problems/[problemId]/edit'>;
+type ProblemPublishEditPageProps = PageProps<'/problems/[problemId]/edit/publish'>;
 
-export async function generateMetadata(props: ProblemEditPageProps): Promise<Metadata> {
+export async function generateMetadata(props: ProblemPublishEditPageProps): Promise<Metadata> {
     const { problemId } = await props.params;
     if (await isProblemDeleted(problemId)) {
         return {
@@ -15,12 +15,12 @@ export async function generateMetadata(props: ProblemEditPageProps): Promise<Met
     }
 
     return {
-        title: `${problemId} の編集トップ | ISE`,
-        description: '問題編集カテゴリのハブ画面',
+        title: `${problemId} の公開設定編集 | ISE`,
+        description: '出典と公開設定の編集画面',
     };
 }
 
-export default async function ProblemEditPage(props: ProblemEditPageProps) {
+export default async function ProblemPublishEditPage(props: ProblemPublishEditPageProps) {
     const { problemId } = await props.params;
     if (await isProblemDeleted(problemId)) {
         notFound();
@@ -28,5 +28,5 @@ export default async function ProblemEditPage(props: ProblemEditPageProps) {
 
     const screen = getProblemEditScreenData(problemId);
 
-    return <ProblemEditScreen problemId={problemId} screen={screen} />;
+    return <ProblemPublishEditScreen problemId={problemId} screen={screen} />;
 }

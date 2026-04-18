@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Problem {
+  id                 String         @id @default(cuid())
+  serialCode         String         @unique
+  title              String
+  subject            String
+  domain             String?
+  tagsText           String?
+  status             String
+  statementMd        String
+  answerMd           String?
+  explanationMd      String?
+  authorMemoMd       String?
+  sourceType         String?
+  sourceDetail       String?
+  difficultySelf     Int?
+  targetLevel        String?
+  estimatedSolveTime Int?
+  archivedAt         DateTime?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  assets             ProblemAsset[]
+}
+
+model ProblemAsset {
+  id         String   @id @default(cuid())
+  problemId  String
+  storageKey String   @unique
+  fileName   String
+  mimeType   String
+  width      Int?
+  height     Int?
+  sizeBytes  Int?
+  altText    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  problem    Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@index([problemId])
+}

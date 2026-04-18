@@ -23,7 +23,7 @@ function statusClassName(status: string) {
     return 'bg-slate-100 text-slate-700 ring-slate-200';
 }
 
-function ProblemsTable({ items }: { items: typeof problemList }) {
+function ProblemsTable({ items }: { items: typeof allProblemList }) {
     return (
         <div className="space-y-3">
             {items.map((problem) => (

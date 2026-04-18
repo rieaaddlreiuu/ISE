@@ -1,5 +1,6 @@
-import type { Priority, TaskStatus as DatabaseTaskStatus } from '@prisma/client';
-import type { DashboardTask, TaskListTask, TaskStatus } from '@/types/tasks';
+import type { DashboardTask, Priority, TaskListTask, TaskStatus } from '@/types/tasks';
+
+type DatabaseTaskStatus = 'todo' | 'doing' | 'done' | 'missed';
 
 type DatabaseTask = {
     id: string;
