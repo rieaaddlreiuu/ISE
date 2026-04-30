@@ -1,32 +1,31 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ProblemEditScreen } from '@/components/problems/problemEditScreen';
-import { isProblemDeleted } from '@/lib/problemDeletion';
-import { getProblemEditScreenData } from '@/mocks/problemEdit';
+import { getProblemEditScreenData, getProblemRecord } from '@/lib/backend/problemViews';
 
 type ProblemEditPageProps = PageProps<'/problems/[problemId]/edit'>;
 
 export async function generateMetadata(props: ProblemEditPageProps): Promise<Metadata> {
     const { problemId } = await props.params;
-    if (await isProblemDeleted(problemId)) {
-        return {
-            title: 'Problem not found | ISE',
-        };
+    const problem = await getProblemRecord(problemId);
+
+    if (!problem) {
+        return { title: '問題が見つかりません | ISE' };
     }
 
     return {
-        title: `${problemId} の編集トップ | ISE`,
-        description: '問題編集カテゴリのハブ画面',
+        title: `${problem.serialCode} 編集 | ISE`,
+        description: 'DB 連携された問題編集画面',
     };
 }
 
 export default async function ProblemEditPage(props: ProblemEditPageProps) {
     const { problemId } = await props.params;
-    if (await isProblemDeleted(problemId)) {
+    const screen = await getProblemEditScreenData(problemId);
+
+    if (!screen) {
         notFound();
     }
-
-    const screen = getProblemEditScreenData(problemId);
 
     return <ProblemEditScreen problemId={problemId} screen={screen} />;
 }

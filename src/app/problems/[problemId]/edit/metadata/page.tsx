@@ -1,34 +1,38 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ProblemMetadataEditScreen } from '@/components/problems/problemMetadataEditScreen';
-import { isProblemDeleted } from '@/lib/problemDeletion';
-import { getProblemEditScreenData } from '@/mocks/problemEdit';
-import { getProblemDetailMock } from '@/mocks/problemDetails';
+import {
+    getProblemDetailView,
+    getProblemEditScreenData,
+    getProblemRecord,
+} from '@/lib/backend/problemViews';
 
 type ProblemMetadataEditPageProps = PageProps<'/problems/[problemId]/edit/metadata'>;
 
 export async function generateMetadata(props: ProblemMetadataEditPageProps): Promise<Metadata> {
     const { problemId } = await props.params;
-    if (await isProblemDeleted(problemId)) {
-        return {
-            title: 'Problem not found | ISE',
-        };
+    const problem = await getProblemRecord(problemId);
+
+    if (!problem) {
+        return { title: '問題が見つかりません | ISE' };
     }
 
     return {
-        title: `${problemId} の問題概要編集 | ISE`,
-        description: '問題概要と難易度評価の編集画面',
+        title: `${problem.serialCode} メタ情報編集 | ISE`,
+        description: '問題メタ情報の編集画面',
     };
 }
 
 export default async function ProblemMetadataEditPage(props: ProblemMetadataEditPageProps) {
     const { problemId } = await props.params;
-    if (await isProblemDeleted(problemId)) {
+    const [screen, problem] = await Promise.all([
+        getProblemEditScreenData(problemId),
+        getProblemDetailView(problemId),
+    ]);
+
+    if (!screen || !problem) {
         notFound();
     }
-
-    const screen = getProblemEditScreenData(problemId);
-    const problem = getProblemDetailMock(problemId);
 
     return <ProblemMetadataEditScreen problemId={problemId} screen={screen} problem={problem} />;
 }

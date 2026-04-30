@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { saveProblemTextAction } from '@/app/problems/actions';
 import { AiSingleRunPanel } from '@/components/problems/aiSingleRunPanel';
 import { DeleteProblemButton } from '@/components/problems/deleteProblemButton';
 import { MarkdownTexTextarea } from '@/components/problems/markdownTexTextarea';
@@ -20,6 +21,7 @@ type ProblemTextEditScreenProps = {
 
 export function ProblemTextEditScreen({ problemId, screen, problem }: ProblemTextEditScreenProps) {
     const { form } = screen;
+    const saveAction = saveProblemTextAction.bind(null, problemId);
 
     return (
         <ProblemEditShell
@@ -45,7 +47,7 @@ export function ProblemTextEditScreen({ problemId, screen, problem }: ProblemTex
                     title="本文フォーム"
                     subtitle="Markdown + TeX で問題文、解答、解説を編集できます。"
                 />
-                <form className="space-y-8 p-5 sm:p-8">
+                <form action={saveAction} className="space-y-8 p-5 sm:p-8">
                     <ProblemEditSection
                         label="Statement"
                         title="問題文"

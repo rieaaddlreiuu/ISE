@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { saveProblemPublishAction } from '@/app/problems/actions';
 import { DeleteProblemButton } from '@/components/problems/deleteProblemButton';
 import {
     ProblemEditActions,
@@ -19,6 +20,7 @@ type ProblemPublishEditScreenProps = {
 
 export function ProblemPublishEditScreen({ problemId, screen }: ProblemPublishEditScreenProps) {
     const { form } = screen;
+    const saveAction = saveProblemPublishAction.bind(null, problemId);
 
     return (
         <ProblemEditShell
@@ -44,7 +46,7 @@ export function ProblemPublishEditScreen({ problemId, screen }: ProblemPublishEd
                     title="公開設定フォーム"
                     subtitle="出典と公開先を分離し、本文編集画面とは責務を分けています。"
                 />
-                <form className="space-y-8 p-5 sm:p-8">
+                <form action={saveAction} className="space-y-8 p-5 sm:p-8">
                     <ProblemEditSection
                         label="Source"
                         title="出典"

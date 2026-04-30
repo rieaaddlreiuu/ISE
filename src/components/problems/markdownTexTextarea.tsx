@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
+import { normalizeDisplayMathBlocks } from '@/lib/markdown';
 
 type MarkdownTexTextareaProps = {
     name: string;
@@ -29,6 +30,7 @@ export function MarkdownTexTextarea({
 }: MarkdownTexTextareaProps) {
     const [value, setValue] = useState(defaultValue);
     const deferredValue = useDeferredValue(value);
+    const normalizedPreview = normalizeDisplayMathBlocks(deferredValue);
 
     return (
         <label className={className ?? 'block'}>
@@ -52,7 +54,7 @@ export function MarkdownTexTextarea({
                 <div className={`markdown-preview px-4 py-4 text-sm text-slate-800 ${previewMinHeightClassName}`}>
                     {deferredValue.trim().length > 0 ? (
                         <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-                            {deferredValue}
+                            {normalizedPreview}
                         </ReactMarkdown>
                     ) : (
                         <p className="text-slate-400">入力内容のプレビューがここに表示されます。</p>

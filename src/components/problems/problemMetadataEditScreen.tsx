@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { saveProblemMetadataAction } from '@/app/problems/actions';
 import { AiSingleRunPanel } from '@/components/problems/aiSingleRunPanel';
 import { DeleteProblemButton } from '@/components/problems/deleteProblemButton';
 import {
@@ -25,6 +26,7 @@ export function ProblemMetadataEditScreen({
     problem,
 }: ProblemMetadataEditScreenProps) {
     const { form } = screen;
+    const saveAction = saveProblemMetadataAction.bind(null, problemId);
 
     return (
         <ProblemEditShell
@@ -50,7 +52,7 @@ export function ProblemMetadataEditScreen({
                     title="メタ情報フォーム"
                     subtitle="ID、タイトル、状態、教科、タグなどの基本情報を編集できます。"
                 />
-                <form className="space-y-8 p-5 sm:p-8">
+                <form action={saveAction} className="space-y-8 p-5 sm:p-8">
                     <ProblemEditSection
                         label="Basics"
                         title="基本情報"

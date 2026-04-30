@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import { normalizeDisplayMathBlocks } from "@/lib/markdown";
 
 type MarkdownTexProps = {
     content: string;
@@ -9,6 +10,8 @@ type MarkdownTexProps = {
 };
 
 export function MarkdownTex({ content, className }: MarkdownTexProps) {
+    const normalizedContent = normalizeDisplayMathBlocks(content);
+
     return (
         <div
             className={[
@@ -32,7 +35,7 @@ export function MarkdownTex({ content, className }: MarkdownTexProps) {
             ].join(" ")}
         >
             <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-                {content}
+                {normalizedContent}
             </ReactMarkdown>
         </div>
     );

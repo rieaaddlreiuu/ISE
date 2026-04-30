@@ -10,25 +10,25 @@ export function getProblemEditSections(problemId: string) {
         {
             id: 'hub' as const,
             label: '編集トップ',
-            description: '編集カテゴリの一覧',
+            description: '編集項目の一覧',
             href: `/problems/${problemId}/edit`,
         },
         {
             id: 'metadata' as const,
-            label: '問題概要',
-            description: '基本情報と難易度評価',
+            label: 'メタ情報',
+            description: 'タイトル、科目、難易度、タグ',
             href: `/problems/${problemId}/edit/metadata`,
         },
         {
             id: 'text' as const,
-            label: '本文・解答・解説',
-            description: '問題文と解説生成',
+            label: '本文',
+            description: '問題文、解答、解説',
             href: `/problems/${problemId}/edit/text`,
         },
         {
             id: 'assets' as const,
-            label: '画像・添付',
-            description: '画像ライブラリとアップロード',
+            label: '画像',
+            description: '添付画像と参照情報',
             href: `/problems/${problemId}/edit/assets`,
         },
         {
@@ -76,8 +76,8 @@ export function ProblemEditShell({
 
                 <Card className="mb-8 shadow-none ring-1 ring-slate-200">
                     <CardHeader
-                        title="編集カテゴリ"
-                        subtitle="詳細画面から直接開ける編集画面です。必要な項目だけを個別に編集します。"
+                        title="編集セクション"
+                        subtitle="この問題の各編集画面を切り替えます。"
                     />
                     <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-5">
                         {sections.map((section) => {
@@ -181,20 +181,18 @@ export function ProblemEditActions({ saveLabel = '保存' }: { saveLabel?: strin
     return (
         <div className="flex flex-wrap items-center gap-3 border-t border-slate-200 pt-8">
             <button
-                type="button"
+                type="submit"
                 className="inline-flex items-center justify-center bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
             >
                 {saveLabel}
             </button>
             <button
-                type="button"
+                type="submit"
                 className="inline-flex items-center justify-center border border-slate-300 px-5 py-2.5 text-sm font-medium text-slate-700 transition hover:border-slate-900 hover:text-slate-950"
             >
                 下書きとして保存
             </button>
-            <span className="text-xs text-slate-500">
-                現在はモック画面です。保存ボタンは表示確認用で、まだデータは更新されません。
-            </span>
+            <span className="text-xs text-slate-500">保存すると現在のデータベースへ反映されます。</span>
         </div>
     );
 }

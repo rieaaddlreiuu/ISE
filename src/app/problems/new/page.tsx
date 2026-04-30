@@ -1,34 +1,31 @@
-import type { Metadata } from "next";
-import type { ReactNode } from "react";
-import Link from "next/link";
-import { PageHeader } from "@/components/layout/pageHeader";
-import { MarkdownTexTextarea } from "@/components/problems/markdownTexTextarea";
-import { Card, CardHeader } from "@/components/ui/card";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import type { ReactNode } from 'react';
+import { createProblemAction } from '@/app/problems/actions';
+import { PageHeader } from '@/components/layout/pageHeader';
+import { MarkdownTexTextarea } from '@/components/problems/markdownTexTextarea';
+import { Card, CardHeader } from '@/components/ui/card';
 
 export const metadata: Metadata = {
-    title: "問題作成 | ISE",
-    description: "問題文、解答方針メモ、公開設定を入力して新しい問題を作成する画面",
+    title: '問題新規登録 | ISE',
+    description: 'データベースに問題を登録',
 };
 
 function sectionLabelClassName() {
-    return "text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500";
+    return 'text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500';
 }
 
 function labelClassName() {
-    return "text-sm font-medium text-slate-700";
-}
-
-function helperTextClassName() {
-    return "mt-2 text-xs leading-5 text-slate-500";
+    return 'text-sm font-medium text-slate-700';
 }
 
 function lineFieldClassName() {
     return [
-        "mt-3 w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-1 text-sm text-slate-900 outline-none transition",
-        "placeholder:text-slate-400",
-        "focus:border-slate-900",
-        "focus:ring-0",
-    ].join(" ");
+        'mt-3 w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-1 text-sm text-slate-900 outline-none transition',
+        'placeholder:text-slate-400',
+        'focus:border-slate-900',
+        'focus:ring-0',
+    ].join(' ');
 }
 
 function lineTextareaClassName() {
@@ -37,17 +34,13 @@ function lineTextareaClassName() {
 
 function lineSelectClassName() {
     return [
-        "mt-3 w-full appearance-none border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-1 text-sm text-slate-900 outline-none transition",
-        "focus:border-slate-900",
-        "focus:ring-0",
-    ].join(" ");
+        'mt-3 w-full appearance-none border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-1 text-sm text-slate-900 outline-none transition',
+        'focus:border-slate-900',
+        'focus:ring-0',
+    ].join(' ');
 }
 
-function formSectionClassName() {
-    return "space-y-6 border-t border-slate-200 pt-8 first:border-t-0 first:pt-0";
-}
-
-function RegistrationSection({
+function Section({
     label,
     title,
     description,
@@ -59,7 +52,7 @@ function RegistrationSection({
     children: ReactNode;
 }) {
     return (
-        <section className={formSectionClassName()}>
+        <section className="space-y-6 border-t border-slate-200 pt-8 first:border-t-0 first:pt-0">
             <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
                 <div className="space-y-2">
                     <p className={sectionLabelClassName()}>{label}</p>
@@ -77,18 +70,18 @@ export default function ProblemRegistrationPage() {
         <main className="min-h-screen bg-[#f5f2ea] text-slate-900">
             <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
                 <PageHeader
-                    backHref="/"
-                    backLabel="ホームへ戻る"
-                    title="問題作成"
-                    description="新しい問題を登録するための入力画面です。問題内容に関する入力欄は Markdown + TeX に対応しています。"
+                    backHref="/problems"
+                    backLabel="問題一覧へ戻る"
+                    title="問題新規登録"
+                    description="このフォームから SQLite の実データとして問題を登録します。"
                     meta="Route: /problems/new"
                     className="mb-10 flex flex-col gap-4 border-b border-slate-300 pb-6 sm:flex-row sm:items-end sm:justify-between"
                     actions={
                         <Link
-                            href="/"
+                            href="/problems"
                             className="inline-flex items-center justify-center border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-900 hover:text-slate-950"
                         >
-                            一覧へ戻る
+                            問題一覧
                         </Link>
                     }
                 />
@@ -96,19 +89,19 @@ export default function ProblemRegistrationPage() {
                 <section className="grid gap-8">
                     <Card className="shadow-none ring-1 ring-slate-200">
                         <CardHeader
-                            title="登録フォーム"
-                            subtitle="基本情報、問題本文、公開設定の順に入力します。現在は画面確認用のモックです。"
+                            title="新規問題フォーム"
+                            subtitle="送信すると必須項目がそのままデータベースに保存されます。"
                         />
 
-                        <form className="space-y-8 p-5 sm:p-8">
-                            <RegistrationSection
+                        <form action={createProblemAction} className="space-y-8 p-5 sm:p-8">
+                            <Section
                                 label="Basics"
                                 title="基本情報"
-                                description="タイトル、科目、難易度などの基本項目を入力します。"
+                                description="既存の Problem テーブルに保存される項目です。"
                             >
                                 <div className="grid gap-6 md:grid-cols-2">
                                     <label className="block">
-                                        <span className={labelClassName()}>登録状態</span>
+                                        <span className={labelClassName()}>ステータス</span>
                                         <select name="stage" defaultValue="draft" className={lineSelectClassName()}>
                                             <option value="draft">下書き</option>
                                             <option value="review">レビュー中</option>
@@ -119,12 +112,11 @@ export default function ProblemRegistrationPage() {
                                 </div>
 
                                 <label className="block">
-                                    <span className={labelClassName()}>問題タイトル</span>
+                                    <span className={labelClassName()}>タイトル</span>
                                     <input
                                         name="title"
-                                        defaultValue="整数 a, b が a + b = 12 を満たすときの最大値と最小値を求める"
                                         className={lineFieldClassName()}
-                                        placeholder="問題タイトル"
+                                        placeholder="問題タイトルを入力"
                                     />
                                 </label>
 
@@ -146,8 +138,8 @@ export default function ProblemRegistrationPage() {
                                         <select name="difficulty" defaultValue="standard" className={lineSelectClassName()}>
                                             <option value="easy">やさしい</option>
                                             <option value="standard">標準</option>
-                                            <option value="hard">やや難</option>
-                                            <option value="very-hard">難しい</option>
+                                            <option value="hard">難しい</option>
+                                            <option value="very-hard">かなり難しい</option>
                                         </select>
                                     </label>
 
@@ -155,9 +147,9 @@ export default function ProblemRegistrationPage() {
                                         <span className={labelClassName()}>形式</span>
                                         <select name="format" defaultValue="descriptive" className={lineSelectClassName()}>
                                             <option value="descriptive">記述</option>
-                                            <option value="multiple">選択</option>
+                                            <option value="multiple">選択式</option>
                                             <option value="short">短答</option>
-                                            <option value="set">大問セット</option>
+                                            <option value="set">セット問題</option>
                                         </select>
                                     </label>
                                 </div>
@@ -166,108 +158,76 @@ export default function ProblemRegistrationPage() {
                                     <span className={labelClassName()}>タグ</span>
                                     <input
                                         name="tags"
-                                        defaultValue="整数, 最大値, 最小値"
                                         className={lineFieldClassName()}
                                         placeholder="タグをカンマ区切りで入力"
                                     />
                                 </label>
-                            </RegistrationSection>
+                            </Section>
 
-                            <RegistrationSection
+                            <Section
                                 label="Content"
-                                title="問題内容"
-                                description="問題文、解答方針メモ、採点メモは Markdown + TeX 記法に対応しています。"
+                                title="本文と解説"
+                                description="問題文は必須です。解説とメモは任意です。"
                             >
                                 <MarkdownTexTextarea
                                     name="statement"
                                     label="問題文"
-                                    rows={6}
-                                    defaultValue={`整数 $a, b$ が $a + b = 12$ を満たすとする。\n\n$ab$ の最大値と最小値を求めよ。\n\n$$a(12-a)$$`}
+                                    rows={8}
+                                    defaultValue=""
                                     textareaClassName={lineTextareaClassName()}
                                     previewMinHeightClassName="min-h-[180px]"
                                 />
 
-                                <div className="space-y-6">
-                                    <MarkdownTexTextarea
-                                        name="answerPolicy"
-                                        label="解答方針メモ"
-                                        rows={6}
-                                        defaultValue={`- $b = 12 - a$ とおいて $ab = a(12-a)$ に変形する。\n- 二次関数として頂点を確認する。\n- 最小値は整数条件の扱いも確認する。`}
-                                        textareaClassName={lineTextareaClassName()}
-                                    />
+                                <MarkdownTexTextarea
+                                    name="answer"
+                                    label="解答"
+                                    rows={6}
+                                    defaultValue=""
+                                    textareaClassName={lineTextareaClassName()}
+                                />
 
-                                    <MarkdownTexTextarea
-                                        name="gradingMemo"
-                                        label="採点メモ"
-                                        rows={6}
-                                        defaultValue={`- 変形のみで終わっている解答は途中点。\n- 最大値・最小値の両方が正しいことを確認する。\n- 根拠のない結論のみの答案は減点対象。`}
-                                        textareaClassName={lineTextareaClassName()}
-                                    />
-                                </div>
-                            </RegistrationSection>
+                                <MarkdownTexTextarea
+                                    name="answerPolicy"
+                                    label="解説"
+                                    rows={6}
+                                    defaultValue=""
+                                    textareaClassName={lineTextareaClassName()}
+                                />
 
-                            <RegistrationSection
+                                <MarkdownTexTextarea
+                                    name="gradingMemo"
+                                    label="作問メモ"
+                                    rows={6}
+                                    defaultValue=""
+                                    textareaClassName={lineTextareaClassName()}
+                                />
+                            </Section>
+
+                            <Section
                                 label="Source"
-                                title="出典と公開設定"
-                                description="出典情報と公開先を入力します。公開先は画面モックです。"
+                                title="出典"
+                                description="出典情報は既存の source フィールドに保存されます。"
                             >
-                                <div className="grid gap-6 lg:grid-cols-2">
-                                    <label className="block">
-                                        <span className={labelClassName()}>出典</span>
-                                        <input
-                                            name="source"
-                                            defaultValue="自作 / 2026 年度教材案"
-                                            className={lineFieldClassName()}
-                                            placeholder="出典、年度、媒体など"
-                                        />
-                                    </label>
-                                </div>
-
-                                <div className="space-y-4">
-                                    <div>
-                                        <div className={labelClassName()}>公開先</div>
-                                        <p className={helperTextClassName()}>
-                                            問題をどの媒体で利用するかを選択します。現在はモック表示です。
-                                        </p>
-                                    </div>
-                                    <div className="grid gap-4 sm:grid-cols-2">
-                                        {["冊子", "学年共有", "Web掲載", "採点メモ共有"].map((target, index) => (
-                                            <label
-                                                key={target}
-                                                className="flex items-start gap-3 border-b border-slate-300 pb-3 text-sm text-slate-700"
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    name="publishingTargets"
-                                                    value={target}
-                                                    defaultChecked={index === 0}
-                                                    className="mt-1 h-4 w-4 border-slate-300 text-slate-900"
-                                                />
-                                                <span>{target}</span>
-                                            </label>
-                                        ))}
-                                    </div>
-                                </div>
-
                                 <label className="block">
-                                    <span className={labelClassName()}>備考</span>
-                                    <textarea
-                                        name="notes"
-                                        rows={4}
-                                        defaultValue="採点者向け共有が必要な場合は、公開前に採点基準との整合を確認する。"
-                                        className={lineTextareaClassName()}
+                                    <span className={labelClassName()}>出典</span>
+                                    <input
+                                        name="source"
+                                        className={lineFieldClassName()}
+                                        placeholder="出典の詳細を入力"
                                     />
                                 </label>
-                            </RegistrationSection>
+                            </Section>
 
                             <div className="flex flex-wrap items-center gap-3 border-t border-slate-200 pt-8">
                                 <button
-                                    type="button"
+                                    type="submit"
                                     className="inline-flex items-center justify-center bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
                                 >
-                                    保存
+                                    登録する
                                 </button>
-                                <span className="text-xs text-slate-500">モック画面のため、保存処理は未実装です。</span>
+                                <span className="text-xs text-slate-500">
+                                    問題コードは自動採番され、登録後に編集画面へ移動します。
+                                </span>
                             </div>
                         </form>
                     </Card>
