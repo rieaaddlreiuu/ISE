@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageHeader } from '@/components/layout/pageHeader';
+import { CopyableTextBlock } from '@/components/problems/copyableTextBlock';
 import { DifficultyValue } from '@/components/problems/difficultyValue';
 import { Card, CardHeader, SummaryCard } from '@/components/ui/card';
 import { MarkdownTex } from '@/components/ui/markdownTex';
@@ -203,10 +204,12 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                                             </summary>
                                             <div className="mt-3 bg-white p-4 ring-1 ring-slate-200">
                                                 {problem.statement.trim().length > 0 ? (
-                                                    <MarkdownTex
-                                                        content={problem.statement}
-                                                        className="text-sm text-slate-800"
-                                                    />
+                                                    <CopyableTextBlock text={problem.statement} label="問題文">
+                                                        <MarkdownTex
+                                                            content={problem.statement}
+                                                            className="text-sm text-slate-800"
+                                                        />
+                                                    </CopyableTextBlock>
                                                 ) : (
                                                     <p className="text-sm text-slate-500">問題文は未登録です。</p>
                                                 )}
