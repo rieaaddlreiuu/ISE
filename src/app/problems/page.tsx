@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { PageHeader } from '@/components/layout/pageHeader';
 import { CopyableTextBlock } from '@/components/problems/copyableTextBlock';
 import { DifficultyValue } from '@/components/problems/difficultyValue';
+import { ProblemSortControls } from '@/components/problems/problemSortControls';
 import { Card, CardHeader, SummaryCard } from '@/components/ui/card';
 import { MarkdownTex } from '@/components/ui/markdownTex';
 import { getProblemListView } from '@/lib/backend/problemViews';
@@ -38,6 +39,8 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
         q: getValue(params.q),
         status: getValue(params.status),
         subject: getValue(params.subject),
+        sort: getValue(params.sort),
+        order: getValue(params.order),
     };
 
     const { items, total, summary } = await getProblemListView(query);
@@ -132,7 +135,11 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                     </Card>
 
                     <Card>
-                        <CardHeader title="問題一覧" subtitle={`該当件数: ${total}件`} />
+                        <CardHeader
+                            title="問題一覧"
+                            subtitle={`該当件数: ${total}件`}
+                            right={<ProblemSortControls sort={query.sort} order={query.order} />}
+                        />
                         <div className="space-y-3 p-4">
                             {items.length === 0 ? (
                                 <div className="border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-sm text-slate-500">
@@ -202,18 +209,20 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                                             <summary className="cursor-pointer text-xs font-semibold text-slate-700 transition hover:text-slate-950">
                                                 問題文を表示
                                             </summary>
-                                            <div className="mt-3 bg-white p-4 ring-1 ring-slate-200">
-                                                {problem.statement.trim().length > 0 ? (
-                                                    <CopyableTextBlock text={problem.statement} label="問題文">
+                                            {problem.statement.trim().length > 0 ? (
+                                                <CopyableTextBlock text={problem.statement} label="問題文">
+                                                    <div className="mt-3 bg-white p-4 ring-1 ring-slate-200">
                                                         <MarkdownTex
                                                             content={problem.statement}
                                                             className="text-sm text-slate-800"
                                                         />
-                                                    </CopyableTextBlock>
-                                                ) : (
+                                                    </div>
+                                                </CopyableTextBlock>
+                                            ) : (
+                                                <div className="mt-3 bg-white p-4 ring-1 ring-slate-200">
                                                     <p className="text-sm text-slate-500">問題文は未登録です。</p>
-                                                )}
-                                            </div>
+                                                </div>
+                                            )}
                                         </details>
                                     </article>
                                 ))

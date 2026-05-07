@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AppHeader } from "@/components/layout/appHeader";
 import "katex/dist/katex.min.css";
 import "./globals.css";
 
@@ -12,6 +13,16 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+const themeInitScript = `
+try {
+  var savedTheme = localStorage.getItem('ise-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : 'dark';
+  document.documentElement.dataset.theme = theme;
+} catch (_) {
+  document.documentElement.dataset.theme = 'dark';
+}
+`;
 
 export const metadata: Metadata = {
   title: "問題管理UI",
@@ -26,9 +37,15 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
+      data-theme="dark"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <AppHeader />
+        {children}
+      </body>
     </html>
   );
 }

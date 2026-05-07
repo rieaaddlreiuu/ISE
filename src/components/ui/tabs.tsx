@@ -44,7 +44,7 @@ export function Tabs({ tabs, initialTabId, framed = true }: TabsProperties) {
                             className={[
                                 'rounded-none px-3 py-2 text-left transition-colors',
                                 isActive
-                                    ? 'border-b-2 border-slate-900 text-slate-900'
+                                    ? 'tab-trigger-active border-b-2 border-slate-900 text-slate-900'
                                     : 'border-b-2 border-transparent text-slate-500 hover:text-slate-900',
                             ].join(' ')}
                             aria-pressed={isActive}
@@ -54,7 +54,7 @@ export function Tabs({ tabs, initialTabId, framed = true }: TabsProperties) {
                                 <div
                                     className={[
                                         'mt-1 text-xs',
-                                        isActive ? 'text-slate-300' : 'text-slate-500',
+                                        isActive ? 'tab-trigger-active-description text-slate-600' : 'text-slate-500',
                                     ].join(' ')}
                                 >
                                     {tab.description}

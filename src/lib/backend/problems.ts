@@ -6,7 +6,7 @@ const DEFAULT_PAGE_SIZE = 20;
 const MAX_PAGE_SIZE = 100;
 
 const allowedStatuses = new Set(['draft', 'review', 'ready', 'published']);
-const allowedSortFields = new Set(['updatedAt', 'createdAt', 'title', 'serialCode']);
+const allowedSortFields = new Set(['updatedAt', 'createdAt', 'serialCode', 'title', 'difficultySelf']);
 const allowedOrders = new Set(['asc', 'desc']);
 
 export type ProblemListQuery = {
@@ -97,7 +97,7 @@ export function parseProblemListQuery(query: ProblemListQuery): ParsedProblemLis
     }
 
     if (!allowedSortFields.has(sortField)) {
-        throw new ProblemListQueryError('sort must be one of updatedAt, createdAt, title, serialCode');
+        throw new ProblemListQueryError('sort must be one of updatedAt, createdAt, serialCode, title, difficultySelf');
     }
 
     if (!allowedOrders.has(order)) {
