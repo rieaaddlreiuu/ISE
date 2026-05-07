@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageHeader } from '@/components/layout/pageHeader';
+import { DifficultyValue } from '@/components/problems/difficultyValue';
 import { Card, CardHeader, SummaryCard } from '@/components/ui/card';
 import { MarkdownTex } from '@/components/ui/markdownTex';
 import { getProblemListView } from '@/lib/backend/problemViews';
@@ -159,7 +160,7 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                                             <div>
                                                 <div className="text-xs text-slate-500">難易度</div>
                                                 <div className="mt-1 text-slate-900">
-                                                    {problem.difficultySelf ?? '-'}
+                                                    <DifficultyValue value={problem.difficultySelf} />
                                                 </div>
                                             </div>
                                             <div>

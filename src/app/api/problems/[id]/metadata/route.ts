@@ -137,10 +137,10 @@ function normalizeOptionalDifficulty(value: unknown) {
         return normalized;
     }
 
-    if (normalized.value !== null && (normalized.value < 1 || normalized.value > 10)) {
+    if (normalized.value !== null && (normalized.value < 1 || normalized.value > 11)) {
         return {
             ok: false as const,
-            response: validationError('difficultySelf must be an integer from 1 to 10 or null', 'difficultySelf'),
+            response: validationError('difficultySelf must be an integer from 1 to 11 or null', 'difficultySelf'),
         };
     }
 

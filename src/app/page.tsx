@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { PageHeader } from '@/components/layout/pageHeader';
+import { DifficultyValue } from '@/components/problems/difficultyValue';
 import { Card, CardHeader, SummaryCard } from '@/components/ui/card';
 import { Tabs } from '@/components/ui/tabs';
 import { getProblemListView } from '@/lib/backend/problemViews';
@@ -68,7 +69,9 @@ function ProblemList({ items }: { items: ProblemListItem[] }) {
                             <dl className="grid grid-cols-2 gap-3 text-sm md:grid-cols-1">
                                 <div>
                                     <dt className="text-xs text-slate-500">難易度</dt>
-                                    <dd className="mt-1 text-slate-900">{problem.difficultySelf ?? '-'}</dd>
+                                    <dd className="mt-1 text-slate-900">
+                                        <DifficultyValue value={problem.difficultySelf} />
+                                    </dd>
                                 </div>
                                 <div>
                                     <dt className="text-xs text-slate-500">出典</dt>

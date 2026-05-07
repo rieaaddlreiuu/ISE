@@ -3,6 +3,7 @@ export type ProblemDetail = {
     title: string;
     subject: string;
     level: string;
+    difficultySelf?: number | null;
     format: string;
     status: string;
     source: string;

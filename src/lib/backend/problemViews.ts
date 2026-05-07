@@ -58,8 +58,8 @@ function difficultyFormValueFromNumber(value: number | null) {
 export function difficultyNumberFromFormValue(value: string) {
     const parsed = Number(value.trim());
 
-    if (!Number.isInteger(parsed) || parsed < 1 || parsed > 10) {
-        throw new Error('difficulty must be an integer from 1 to 10');
+    if (!Number.isInteger(parsed) || parsed < 1 || parsed > 11) {
+        throw new Error('difficulty must be an integer from 1 to 11');
     }
 
     return parsed;
@@ -150,6 +150,7 @@ export async function getProblemDetailView(problemId: string): Promise<ProblemDe
         title: problem.title,
         subject: formatSubject(problem.subject),
         level: formatDifficulty(problem.difficultySelf),
+        difficultySelf: problem.difficultySelf,
         format: problem.targetLevel ?? 'Descriptive',
         status: problem.status,
         source: problem.sourceDetail ?? 'Not set',

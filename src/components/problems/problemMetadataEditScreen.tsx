@@ -109,11 +109,11 @@ export function ProblemMetadataEditScreen({
                                     name="difficulty"
                                     type="number"
                                     min="1"
-                                    max="10"
+                                    max="11"
                                     step="1"
                                     defaultValue={form.difficulty || '5'}
                                     className={lineFieldClassName()}
-                                    placeholder="1〜10"
+                                    placeholder="1〜11"
                                 />
                             </label>
 

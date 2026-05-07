@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import { ProblemAssetsPanel } from '@/components/problems/problemAssetsPanel';
 import { DeleteProblemButton } from '@/components/problems/deleteProblemButton';
+import { DifficultyValue } from '@/components/problems/difficultyValue';
 import { getProblemEditSections } from '@/components/problems/problemEditShell';
 import { PageHeader } from '@/components/layout/pageHeader';
 import { Card, CardHeader } from '@/components/ui/card';
@@ -22,7 +24,7 @@ function statusClassName(status: string) {
     return 'bg-slate-100 text-slate-700 ring-slate-200';
 }
 
-function InfoItem({ label, value }: { label: string; value: string }) {
+function InfoItem({ label, value }: { label: string; value: ReactNode }) {
     return (
         <div className="border border-slate-200 bg-slate-50 p-4">
             <dt className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">{label}</dt>
@@ -76,7 +78,16 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
                         <dl className="grid gap-4 p-4 md:grid-cols-2 xl:grid-cols-4">
                             <InfoItem label="問題コード" value={problem.id} />
                             <InfoItem label="科目" value={problem.subject} />
-                            <InfoItem label="難易度" value={problem.level} />
+                            <InfoItem
+                                label="難易度"
+                                value={
+                                    problem.difficultySelf === undefined ? (
+                                        problem.level
+                                    ) : (
+                                        <DifficultyValue value={problem.difficultySelf} fallback={problem.level} />
+                                    )
+                                }
+                            />
                             <InfoItem label="形式" value={problem.format} />
                         </dl>
                     </Card>
