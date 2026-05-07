@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { difficultyNumberFromFormValue } from '@/lib/backend/problemViews';
+import { assertExistingTagIds, readTagIdsFromFormData } from '@/lib/backend/tags';
 
 function readRequiredString(formData: FormData, key: string) {
     const value = formData.get(key);
@@ -41,6 +42,9 @@ export async function createProblemAction(formData: FormData) {
     const subject = readRequiredString(formData, 'subject');
     const status = readRequiredString(formData, 'stage');
     const statementMd = readRequiredString(formData, 'statement');
+    const tagIds = readTagIdsFromFormData(formData);
+
+    await assertExistingTagIds(tagIds);
 
     const problem = await prisma.problem.create({
         data: {
@@ -49,13 +53,22 @@ export async function createProblemAction(formData: FormData) {
             subject,
             status,
             statementMd,
-            tagsText: readOptionalString(formData, 'tags'),
+            tagsText: null,
             answerMd: readOptionalString(formData, 'answer'),
             explanationMd: readOptionalString(formData, 'answerPolicy'),
             authorMemoMd: readOptionalString(formData, 'gradingMemo'),
             sourceDetail: readOptionalString(formData, 'source'),
             difficultySelf: difficultyNumberFromFormValue(readRequiredString(formData, 'difficulty')),
             targetLevel: readOptionalString(formData, 'format'),
+            problemTags: {
+                create: tagIds.map((tagId) => ({
+                    tag: {
+                        connect: {
+                            id: tagId,
+                        },
+                    },
+                })),
+            },
         },
         select: {
             id: true,
@@ -68,6 +81,10 @@ export async function createProblemAction(formData: FormData) {
 }
 
 export async function saveProblemMetadataAction(problemId: string, formData: FormData) {
+    const tagIds = readTagIdsFromFormData(formData);
+
+    await assertExistingTagIds(tagIds);
+
     await prisma.problem.update({
         where: { id: problemId },
         data: {
@@ -75,9 +92,19 @@ export async function saveProblemMetadataAction(problemId: string, formData: For
             title: readRequiredString(formData, 'title'),
             subject: readRequiredString(formData, 'subject'),
             status: readRequiredString(formData, 'status'),
-            tagsText: readOptionalString(formData, 'tags'),
+            tagsText: null,
             difficultySelf: difficultyNumberFromFormValue(readRequiredString(formData, 'difficulty')),
             targetLevel: readOptionalString(formData, 'format'),
+            problemTags: {
+                deleteMany: {},
+                create: tagIds.map((tagId) => ({
+                    tag: {
+                        connect: {
+                            id: tagId,
+                        },
+                    },
+                })),
+            },
         },
     });
 

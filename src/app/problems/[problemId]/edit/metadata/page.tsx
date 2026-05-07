@@ -6,6 +6,7 @@ import {
     getProblemEditScreenData,
     getProblemRecord,
 } from '@/lib/backend/problemViews';
+import { listTagOptions } from '@/lib/backend/tags';
 
 type ProblemMetadataEditPageProps = PageProps<'/problems/[problemId]/edit/metadata'>;
 
@@ -25,14 +26,22 @@ export async function generateMetadata(props: ProblemMetadataEditPageProps): Pro
 
 export default async function ProblemMetadataEditPage(props: ProblemMetadataEditPageProps) {
     const { problemId } = await props.params;
-    const [screen, problem] = await Promise.all([
+    const [screen, problem, tagOptions] = await Promise.all([
         getProblemEditScreenData(problemId),
         getProblemDetailView(problemId),
+        listTagOptions(),
     ]);
 
     if (!screen || !problem) {
         notFound();
     }
 
-    return <ProblemMetadataEditScreen problemId={problemId} screen={screen} problem={problem} />;
+    return (
+        <ProblemMetadataEditScreen
+            problemId={problemId}
+            screen={screen}
+            problem={problem}
+            tagOptions={tagOptions}
+        />
+    );
 }

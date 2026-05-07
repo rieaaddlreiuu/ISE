@@ -52,6 +52,34 @@ async function main() {
     `);
 
     await prisma.$executeRawUnsafe(`
+        CREATE TABLE IF NOT EXISTS "Tag" (
+            "id" TEXT NOT NULL PRIMARY KEY,
+            "name" TEXT NOT NULL,
+            "slug" TEXT NOT NULL,
+            "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+    `);
+
+    await prisma.$executeRawUnsafe(`
+        CREATE TABLE IF NOT EXISTS "ProblemTag" (
+            "problemId" TEXT NOT NULL,
+            "tagId" TEXT NOT NULL,
+            PRIMARY KEY ("problemId", "tagId"),
+            CONSTRAINT "ProblemTag_problemId_fkey"
+                FOREIGN KEY ("problemId")
+                REFERENCES "Problem" ("id")
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+            CONSTRAINT "ProblemTag_tagId_fkey"
+                FOREIGN KEY ("tagId")
+                REFERENCES "Tag" ("id")
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+        );
+    `);
+
+    await prisma.$executeRawUnsafe(`
         CREATE UNIQUE INDEX IF NOT EXISTS "Problem_serialCode_key"
         ON "Problem"("serialCode");
     `);
@@ -64,6 +92,16 @@ async function main() {
     await prisma.$executeRawUnsafe(`
         CREATE INDEX IF NOT EXISTS "ProblemAsset_problemId_idx"
         ON "ProblemAsset"("problemId");
+    `);
+
+    await prisma.$executeRawUnsafe(`
+        CREATE UNIQUE INDEX IF NOT EXISTS "Tag_slug_key"
+        ON "Tag"("slug");
+    `);
+
+    await prisma.$executeRawUnsafe(`
+        CREATE INDEX IF NOT EXISTS "ProblemTag_tagId_idx"
+        ON "ProblemTag"("tagId");
     `);
 }
 

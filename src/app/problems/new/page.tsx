@@ -4,12 +4,16 @@ import type { ReactNode } from 'react';
 import { createProblemAction } from '@/app/problems/actions';
 import { PageHeader } from '@/components/layout/pageHeader';
 import { MarkdownTexTextarea } from '@/components/problems/markdownTexTextarea';
+import { ProblemTagChipSelector } from '@/components/problems/problemTagChipSelector';
 import { Card, CardHeader } from '@/components/ui/card';
+import { listTagOptions } from '@/lib/backend/tags';
 
 export const metadata: Metadata = {
     title: '問題新規登録 | ISE',
     description: 'データベースに問題を登録',
 };
+
+export const dynamic = 'force-dynamic';
 
 function sectionLabelClassName() {
     return 'text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500';
@@ -65,7 +69,9 @@ function Section({
     );
 }
 
-export default function ProblemRegistrationPage() {
+export default async function ProblemRegistrationPage() {
+    const tagOptions = await listTagOptions();
+
     return (
         <main className="min-h-screen bg-[#f5f2ea] text-slate-900">
             <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
@@ -158,14 +164,12 @@ export default function ProblemRegistrationPage() {
                                     </label>
                                 </div>
 
-                                <label className="block">
+                                <div className="block">
                                     <span className={labelClassName()}>タグ</span>
-                                    <input
-                                        name="tags"
-                                        className={lineFieldClassName()}
-                                        placeholder="タグをカンマ区切りで入力"
-                                    />
-                                </label>
+                                    <div className="mt-3">
+                                        <ProblemTagChipSelector options={tagOptions} />
+                                    </div>
+                                </div>
                             </Section>
 
                             <Section

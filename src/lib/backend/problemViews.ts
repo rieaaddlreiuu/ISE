@@ -55,6 +55,15 @@ function difficultyFormValueFromNumber(value: number | null) {
     return value === null ? '' : String(value);
 }
 
+function tagsFromProblem(problem: { tagsText: string | null; problemTags?: Array<{ tag: { name: string } }> }) {
+    const relationTags = problem.problemTags?.map((problemTag) => problemTag.tag.name) ?? [];
+    return relationTags.length > 0 ? relationTags : splitTags(problem.tagsText);
+}
+
+function tagIdsFromProblem(problem: { problemTags?: Array<{ tagId: string }> }) {
+    return problem.problemTags?.map((problemTag) => problemTag.tagId) ?? [];
+}
+
 export function difficultyNumberFromFormValue(value: string) {
     const parsed = Number(value.trim());
 
@@ -128,6 +137,16 @@ const getProblemRecordCached = cache(async (problemId: string) => {
             assets: {
                 orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
             },
+            problemTags: {
+                include: {
+                    tag: true,
+                },
+                orderBy: {
+                    tag: {
+                        name: 'asc',
+                    },
+                },
+            },
         },
     });
 });
@@ -142,7 +161,7 @@ export async function getProblemDetailView(problemId: string): Promise<ProblemDe
         return null;
     }
 
-    const tags = splitTags(problem.tagsText);
+    const tags = tagsFromProblem(problem);
     const destinations = formatDestinations(problem.sourceType);
 
     return {
@@ -198,7 +217,7 @@ export async function getProblemEditScreenData(problemId: string): Promise<Probl
         return null;
     }
 
-    const tags = splitTags(problem.tagsText).join(', ');
+    const tags = tagsFromProblem(problem).join(', ');
     const destinations = parseDestinations(problem.sourceType);
 
     return {
@@ -210,6 +229,7 @@ export async function getProblemEditScreenData(problemId: string): Promise<Probl
             difficulty: difficultyFormValueFromNumber(problem.difficultySelf),
             format: problem.targetLevel ?? 'descriptive',
             tags,
+            tagIds: tagIdsFromProblem(problem),
             statement: problem.statementMd,
             answerPolicy: problem.explanationMd ?? '',
             gradingMemo: problem.authorMemoMd ?? '',

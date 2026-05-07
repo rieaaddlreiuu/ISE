@@ -15,6 +15,11 @@ function parseTags(tagsText: string | null) {
         .filter((tag) => tag.length > 0);
 }
 
+function tagsFromProblem(problem: { tagsText: string | null; problemTags?: Array<{ tag: { name: string } }> }) {
+    const relationTags = problem.problemTags?.map((problemTag) => problemTag.tag.name) ?? [];
+    return relationTags.length > 0 ? relationTags : parseTags(problem.tagsText);
+}
+
 export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
     const { id } = await context.params;
     if (!id) {
@@ -27,6 +32,16 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
             assets: {
                 orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
             },
+            problemTags: {
+                include: {
+                    tag: true,
+                },
+                orderBy: {
+                    tag: {
+                        name: 'asc',
+                    },
+                },
+            },
         },
     });
 
@@ -36,6 +51,6 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
 
     return Response.json({
         ...problem,
-        tags: parseTags(problem.tagsText),
+        tags: tagsFromProblem(problem),
     });
 }

@@ -28,6 +28,7 @@ model Problem {
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
   assets             ProblemAsset[]
+  problemTags        ProblemTag[]
 }
 
 model ProblemAsset {
@@ -45,4 +46,23 @@ model ProblemAsset {
   problem    Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
   @@index([problemId])
+}
+
+model Tag {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  problemTags ProblemTag[]
+}
+
+model ProblemTag {
+  problemId String
+  tagId     String
+  problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([problemId, tagId])
+  @@index([tagId])
 }

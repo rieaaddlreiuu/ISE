@@ -6,6 +6,7 @@ export type ProblemEditFormValue = {
     difficulty: string;
     format: string;
     tags: string;
+    tagIds: string[];
     statement: string;
     answerPolicy: string;
     gradingMemo: string;
@@ -39,6 +40,7 @@ const problemEditMocks: Record<string, ProblemEditScreenData> = {
             difficulty: "5",
             format: "descriptive",
             tags: "整数, 2次関数, 最大値・最小値",
+            tagIds: [],
             statement:
                 "整数 a, b が a + b = 12 を満たしている。ab の最大値と最小値をそれぞれ求め、そのときの a, b の組も答えなさい。",
             answerPolicy:
@@ -89,6 +91,7 @@ const problemEditMocks: Record<string, ProblemEditScreenData> = {
             difficulty: "7",
             format: "descriptive",
             tags: "ベクトル, 内積, 図形",
+            tagIds: [],
             statement:
                 "座標平面上の 3 点 A, B, C が与えられている。ベクトルの内積を用いて三角形 ABC が直角三角形となる条件を導きなさい。",
             answerPolicy:
@@ -135,6 +138,7 @@ const defaultProblemEditScreenData = (problemId: string): ProblemEditScreenData 
         difficulty: "5",
         format: "descriptive",
         tags: "モック, 編集画面",
+        tagIds: [],
         statement: "ここに問題文モックを表示します。",
         answerPolicy: "ここに解答方針モックを表示します。",
         gradingMemo: "ここに採点メモモックを表示します。",

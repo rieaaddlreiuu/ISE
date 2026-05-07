@@ -1,0 +1,253 @@
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+function normalizeTagName(value) {
+    return value.trim().replace(/\s+/g, ' ');
+}
+
+function slugFromTagName(value) {
+    return normalizeTagName(value).toLocaleLowerCase('ja-JP');
+}
+
+const tagNames = [
+    '数学',
+    '算数',
+    '国語',
+    '英語',
+    '物理',
+    '化学',
+    '生物',
+    '地学',
+    '社会',
+    '情報',
+    '中学',
+    '高校',
+    '大学受験',
+    '基礎',
+    '標準',
+    '応用',
+    '発展',
+    '記述',
+    '選択',
+    '短答',
+    '証明',
+    '計算',
+    '読解',
+    '論述',
+    '図形',
+    'グラフ',
+    '表',
+    '場合分け',
+    '典型問題',
+    '融合問題',
+    '整数',
+    '自然数',
+    '約数',
+    '倍数',
+    '素数',
+    '合同式',
+    '不定方程式',
+    '最大最小',
+    '絶対値',
+    '方程式',
+    '不等式',
+    '連立方程式',
+    '一次関数',
+    '二次関数',
+    '二次方程式',
+    '二次不等式',
+    '判別式',
+    '平方完成',
+    '関数',
+    '指数関数',
+    '対数関数',
+    '三角関数',
+    '逆関数',
+    '合成関数',
+    '数列',
+    '等差数列',
+    '等比数列',
+    '漸化式',
+    '数学的帰納法',
+    '極限',
+    '微分',
+    '積分',
+    '接線',
+    '面積',
+    '体積',
+    'ベクトル',
+    '内積',
+    '平面ベクトル',
+    '空間ベクトル',
+    '座標',
+    '直線',
+    '円',
+    '放物線',
+    '楕円',
+    '双曲線',
+    '三角形',
+    '四角形',
+    '相似',
+    '合同',
+    '三平方の定理',
+    '確率',
+    '場合の数',
+    '順列',
+    '組合せ',
+    '期待値',
+    '統計',
+    '平均',
+    '分散',
+    '標準偏差',
+    '複素数',
+    '複素数平面',
+    '行列',
+    '集合',
+    '命題',
+    '論理',
+    '物理基礎',
+    '力学',
+    '運動方程式',
+    '等加速度運動',
+    '仕事とエネルギー',
+    '運動量',
+    '円運動',
+    '単振動',
+    '万有引力',
+    '波動',
+    '音波',
+    '光波',
+    '電磁気',
+    '電場',
+    '磁場',
+    '回路',
+    'コンデンサー',
+    '熱力学',
+    '原子',
+    '化学基礎',
+    '物質量',
+    'モル',
+    '化学反応式',
+    '酸塩基',
+    '中和',
+    '酸化還元',
+    '電池',
+    '電気分解',
+    '気体',
+    '溶液',
+    '濃度',
+    '化学平衡',
+    '無機化学',
+    '有機化学',
+    '高分子',
+    '現代文',
+    '古文',
+    '漢文',
+    '評論',
+    '小説',
+    '随筆',
+    '詩歌',
+    '要約',
+    '主旨',
+    '理由説明',
+    '内容説明',
+    '抜き出し',
+    '語彙',
+    '文法',
+    '敬語',
+    '古典文法',
+    '句法',
+    '英単語',
+    '英文法',
+    '英文解釈',
+    '長文読解',
+    '英作文',
+    'リスニング',
+    '会話文',
+    '整序',
+    '空所補充',
+    '同意表現',
+    '時制',
+    '助動詞',
+    '受動態',
+    '不定詞',
+    '動名詞',
+    '分詞',
+    '関係詞',
+    '仮定法',
+    '比較',
+    '前置詞',
+    '接続詞',
+    '日本史',
+    '世界史',
+    '地理',
+    '公民',
+    '政治経済',
+    '倫理',
+    '資料読解',
+    '年代整序',
+    '地図',
+    '統計資料',
+    'プログラミング',
+    'アルゴリズム',
+    'データ構造',
+    '再帰',
+    '探索',
+    'ソート',
+    '動的計画法',
+    'データベース',
+    'ネットワーク',
+    '情報セキュリティ',
+];
+
+const tags = Array.from(
+    new Map(
+        tagNames.map((name) => {
+            const normalizedName = normalizeTagName(name);
+            return [
+                slugFromTagName(normalizedName),
+                {
+                    name: normalizedName,
+                    slug: slugFromTagName(normalizedName),
+                },
+            ];
+        }),
+    ).values(),
+);
+
+async function main() {
+    let inserted = 0;
+
+    for (const tag of tags) {
+        const existing = await prisma.tag.findUnique({
+            where: {
+                slug: tag.slug,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (existing) {
+            continue;
+        }
+
+        await prisma.tag.create({
+            data: tag,
+        });
+        inserted += 1;
+    }
+
+    const total = await prisma.tag.count();
+    console.log(`Inserted ${inserted} tags. Total tags: ${total}.`);
+}
+
+try {
+    await main();
+} catch (error) {
+    console.error(error);
+    process.exitCode = 1;
+} finally {
+    await prisma.$disconnect();
+}

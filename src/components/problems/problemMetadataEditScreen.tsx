@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { saveProblemMetadataAction } from '@/app/problems/actions';
 import { AiSingleRunPanel } from '@/components/problems/aiSingleRunPanel';
 import { DeleteProblemButton } from '@/components/problems/deleteProblemButton';
+import { ProblemTagChipSelector } from '@/components/problems/problemTagChipSelector';
 import {
     ProblemEditActions,
     ProblemEditSection,
@@ -11,6 +12,7 @@ import {
     lineSelectClassName,
 } from '@/components/problems/problemEditShell';
 import { Card, CardHeader } from '@/components/ui/card';
+import type { TagOption } from '@/lib/backend/tags';
 import type { ProblemEditScreenData } from '@/mocks/problemEdit';
 import type { ProblemDetail } from '@/mocks/problemDetails';
 
@@ -18,12 +20,14 @@ type ProblemMetadataEditScreenProps = {
     problemId: string;
     screen: ProblemEditScreenData;
     problem: ProblemDetail;
+    tagOptions: TagOption[];
 };
 
 export function ProblemMetadataEditScreen({
     problemId,
     screen,
     problem,
+    tagOptions,
 }: ProblemMetadataEditScreenProps) {
     const { form } = screen;
     const saveAction = saveProblemMetadataAction.bind(null, problemId);
@@ -128,15 +132,15 @@ export function ProblemMetadataEditScreen({
                             </label>
                         </div>
 
-                        <label className="block">
+                        <div className="block">
                             <span className={labelClassName()}>タグ</span>
-                            <input
-                                name="tags"
-                                defaultValue={form.tags}
-                                className={lineFieldClassName()}
-                                placeholder="タグをカンマ区切りで入力"
-                            />
-                        </label>
+                            <div className="mt-3">
+                                <ProblemTagChipSelector
+                                    options={tagOptions}
+                                    initialSelectedTagIds={form.tagIds}
+                                />
+                            </div>
+                        </div>
                     </ProblemEditSection>
 
                     <ProblemEditActions />

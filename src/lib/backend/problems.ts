@@ -126,6 +126,11 @@ function splitTags(tagsText: string | null) {
         .filter((tag) => tag.length > 0);
 }
 
+function tagsFromProblem(problem: { tagsText: string | null; problemTags?: Array<{ tag: { name: string } }> }) {
+    const relationTags = problem.problemTags?.map((problemTag) => problemTag.tag.name) ?? [];
+    return relationTags.length > 0 ? relationTags : splitTags(problem.tagsText);
+}
+
 function buildWhereClause(query: ParsedProblemListQuery): Prisma.ProblemWhereInput {
     const and: Prisma.ProblemWhereInput[] = [{ archivedAt: null }];
 
@@ -138,7 +143,15 @@ function buildWhereClause(query: ParsedProblemListQuery): Prisma.ProblemWhereInp
     }
 
     if (query.tag) {
-        and.push({ tagsText: { contains: query.tag } });
+        and.push({
+            problemTags: {
+                some: {
+                    tag: {
+                        slug: query.tag,
+                    },
+                },
+            },
+        });
     }
 
     if (query.q) {
@@ -148,6 +161,7 @@ function buildWhereClause(query: ParsedProblemListQuery): Prisma.ProblemWhereInp
                 { title: { contains: query.q } },
                 { statementMd: { contains: query.q } },
                 { tagsText: { contains: query.q } },
+                { problemTags: { some: { tag: { name: { contains: query.q } } } } },
                 { domain: { contains: query.q } },
             ],
         });
@@ -168,6 +182,18 @@ export async function listProblems(rawQuery: ProblemListQuery): Promise<ProblemL
             orderBy: query.sort,
             skip,
             take: query.pageSize,
+            include: {
+                problemTags: {
+                    include: {
+                        tag: true,
+                    },
+                    orderBy: {
+                        tag: {
+                            name: 'asc',
+                        },
+                    },
+                },
+            },
         }),
     ]);
 
@@ -180,7 +206,7 @@ export async function listProblems(rawQuery: ProblemListQuery): Promise<ProblemL
             subject: problem.subject,
             domain: problem.domain,
             tagsText: problem.tagsText,
-            tags: splitTags(problem.tagsText),
+            tags: tagsFromProblem(problem),
             status: problem.status,
             sourceType: problem.sourceType,
             sourceDetail: problem.sourceDetail,
