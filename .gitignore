@@ -49,3 +49,6 @@ next-env.d.ts
 
 AGENTS.md
 CLAUDE.md
+
+dev-server.err.log
+dev-server.out.log

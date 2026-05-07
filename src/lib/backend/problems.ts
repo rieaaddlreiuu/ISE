@@ -24,6 +24,7 @@ export type ProblemListItem = {
     id: string;
     serialCode: string;
     title: string;
+    statement: string;
     subject: string;
     domain: string | null;
     tagsText: string | null;
@@ -175,6 +176,7 @@ export async function listProblems(rawQuery: ProblemListQuery): Promise<ProblemL
             id: problem.id,
             serialCode: problem.serialCode,
             title: problem.title,
+            statement: problem.statementMd,
             subject: problem.subject,
             domain: problem.domain,
             tagsText: problem.tagsText,

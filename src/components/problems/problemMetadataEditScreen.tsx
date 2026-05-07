@@ -105,16 +105,16 @@ export function ProblemMetadataEditScreen({
 
                             <label className="block">
                                 <span className={labelClassName()}>難易度</span>
-                                <select
+                                <input
                                     name="difficulty"
-                                    defaultValue={form.difficulty}
-                                    className={lineSelectClassName()}
-                                >
-                                    <option value="easy">やさしい</option>
-                                    <option value="standard">標準</option>
-                                    <option value="hard">やや難</option>
-                                    <option value="very-hard">難しい</option>
-                                </select>
+                                    type="number"
+                                    min="1"
+                                    max="10"
+                                    step="1"
+                                    defaultValue={form.difficulty || '5'}
+                                    className={lineFieldClassName()}
+                                    placeholder="1〜10"
+                                />
                             </label>
 
                             <label className="block">

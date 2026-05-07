@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import { difficultyNumberFromPreset } from '@/lib/backend/problemViews';
+import { difficultyNumberFromFormValue } from '@/lib/backend/problemViews';
 
 function readRequiredString(formData: FormData, key: string) {
     const value = formData.get(key);
@@ -54,7 +54,7 @@ export async function createProblemAction(formData: FormData) {
             explanationMd: readOptionalString(formData, 'answerPolicy'),
             authorMemoMd: readOptionalString(formData, 'gradingMemo'),
             sourceDetail: readOptionalString(formData, 'source'),
-            difficultySelf: difficultyNumberFromPreset(readRequiredString(formData, 'difficulty')),
+            difficultySelf: difficultyNumberFromFormValue(readRequiredString(formData, 'difficulty')),
             targetLevel: readOptionalString(formData, 'format'),
         },
         select: {
@@ -76,7 +76,7 @@ export async function saveProblemMetadataAction(problemId: string, formData: For
             subject: readRequiredString(formData, 'subject'),
             status: readRequiredString(formData, 'status'),
             tagsText: readOptionalString(formData, 'tags'),
-            difficultySelf: difficultyNumberFromPreset(readRequiredString(formData, 'difficulty')),
+            difficultySelf: difficultyNumberFromFormValue(readRequiredString(formData, 'difficulty')),
             targetLevel: readOptionalString(formData, 'format'),
         },
     });

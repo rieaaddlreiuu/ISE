@@ -135,12 +135,16 @@ export default function ProblemRegistrationPage() {
 
                                     <label className="block">
                                         <span className={labelClassName()}>難易度</span>
-                                        <select name="difficulty" defaultValue="standard" className={lineSelectClassName()}>
-                                            <option value="easy">やさしい</option>
-                                            <option value="standard">標準</option>
-                                            <option value="hard">難しい</option>
-                                            <option value="very-hard">かなり難しい</option>
-                                        </select>
+                                        <input
+                                            name="difficulty"
+                                            type="number"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            defaultValue="5"
+                                            className={lineFieldClassName()}
+                                            placeholder="1〜10"
+                                        />
                                     </label>
 
                                     <label className="block">

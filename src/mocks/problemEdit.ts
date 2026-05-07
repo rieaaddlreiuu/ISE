@@ -36,7 +36,7 @@ const problemEditMocks: Record<string, ProblemEditScreenData> = {
             title: "整数 a, b が a + b = 12 を満たすとき、ab の最大値と最小値を求める",
             status: "draft",
             subject: "math",
-            difficulty: "standard",
+            difficulty: "5",
             format: "descriptive",
             tags: "整数, 2次関数, 最大値・最小値",
             statement:
@@ -86,7 +86,7 @@ const problemEditMocks: Record<string, ProblemEditScreenData> = {
             title: "ベクトルの内積を用いて三角形の形状を判定する",
             status: "published",
             subject: "math",
-            difficulty: "hard",
+            difficulty: "7",
             format: "descriptive",
             tags: "ベクトル, 内積, 図形",
             statement:
@@ -132,7 +132,7 @@ const defaultProblemEditScreenData = (problemId: string): ProblemEditScreenData 
         title: `${problemId} の編集モック`,
         status: "draft",
         subject: "other",
-        difficulty: "standard",
+        difficulty: "5",
         format: "descriptive",
         tags: "モック, 編集画面",
         statement: "ここに問題文モックを表示します。",

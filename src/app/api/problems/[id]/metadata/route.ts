@@ -130,6 +130,23 @@ function normalizeOptionalInteger(value: unknown, field: string) {
     };
 }
 
+function normalizeOptionalDifficulty(value: unknown) {
+    const normalized = normalizeOptionalInteger(value, 'difficultySelf');
+
+    if (!normalized.ok) {
+        return normalized;
+    }
+
+    if (normalized.value !== null && (normalized.value < 1 || normalized.value > 10)) {
+        return {
+            ok: false as const,
+            response: validationError('difficultySelf must be an integer from 1 to 10 or null', 'difficultySelf'),
+        };
+    }
+
+    return normalized;
+}
+
 function parseMetadataPatchBody(body: MetadataPatchBody) {
     if (!body || typeof body !== 'object' || Array.isArray(body)) {
         return {
@@ -264,7 +281,7 @@ function parseMetadataPatchBody(body: MetadataPatchBody) {
     }
 
     if ('difficultySelf' in body) {
-        const normalized = normalizeOptionalInteger(body.difficultySelf, 'difficultySelf');
+        const normalized = normalizeOptionalDifficulty(body.difficultySelf);
         if (!normalized.ok) {
             return {
                 ok: false as const,

@@ -51,39 +51,18 @@ function formatStatus(status: string) {
     return statusLabels[status] ?? status;
 }
 
-function difficultyPresetFromNumber(value: number | null) {
-    if (value === null) {
-        return 'standard';
-    }
-
-    if (value <= 2) {
-        return 'easy';
-    }
-
-    if (value <= 4) {
-        return 'standard';
-    }
-
-    if (value <= 6) {
-        return 'hard';
-    }
-
-    return 'very-hard';
+function difficultyFormValueFromNumber(value: number | null) {
+    return value === null ? '' : String(value);
 }
 
-export function difficultyNumberFromPreset(value: string) {
-    switch (value) {
-        case 'easy':
-            return 2;
-        case 'standard':
-            return 4;
-        case 'hard':
-            return 6;
-        case 'very-hard':
-            return 8;
-        default:
-            return null;
+export function difficultyNumberFromFormValue(value: string) {
+    const parsed = Number(value.trim());
+
+    if (!Number.isInteger(parsed) || parsed < 1 || parsed > 10) {
+        throw new Error('difficulty must be an integer from 1 to 10');
     }
+
+    return parsed;
 }
 
 function formatDifficulty(value: number | null) {
@@ -227,7 +206,7 @@ export async function getProblemEditScreenData(problemId: string): Promise<Probl
             title: problem.title,
             status: problem.status,
             subject: problem.subject,
-            difficulty: difficultyPresetFromNumber(problem.difficultySelf),
+            difficulty: difficultyFormValueFromNumber(problem.difficultySelf),
             format: problem.targetLevel ?? 'descriptive',
             tags,
             statement: problem.statementMd,

@@ -111,7 +111,152 @@ export function normalizeDisplayMathBlocks(content: string) {
         index += 1;
     }
 
+    return normalizeLatexDelimiters(result);
+}
+
+function normalizeLatexDelimiters(content: string) {
+    let result = '';
+    let index = 0;
+
+    while (index < content.length) {
+        if (content.slice(index, index + 2) === '$$') {
+            const end = content.indexOf('$$', index + 2);
+
+            if (end === -1) {
+                result += content.slice(index);
+                break;
+            }
+
+            result += `$$${normalizeLatexDelimiterCommands(content.slice(index + 2, end))}$$`;
+            index = end + 2;
+            continue;
+        }
+
+        if (content[index] === '$') {
+            const end = findInlineMathEnd(content, index + 1);
+
+            if (end === -1) {
+                result += content[index];
+                index += 1;
+                continue;
+            }
+
+            result += `$${normalizeLatexDelimiterCommands(content.slice(index + 1, end))}$`;
+            index = end + 1;
+            continue;
+        }
+
+        result += content[index];
+        index += 1;
+    }
+
     return result;
+}
+
+function normalizeLatexDelimiterCommands(math: string) {
+    let result = '';
+    let index = 0;
+    let openDelimiterCount = 0;
+
+    while (index < math.length) {
+        if (math[index] === '\\') {
+            const command = readLatexCommand(math, index);
+
+            if (command?.name === 'right') {
+                const delimiter = readLatexDelimiter(math, command.end);
+
+                if (delimiter && openDelimiterCount === 0 && isOpeningDelimiter(delimiter.value)) {
+                    result += `\\left${math.slice(command.end, delimiter.end)}`;
+                    openDelimiterCount += 1;
+                    index = delimiter.end;
+                    continue;
+                }
+            }
+
+            if (command?.name === 'left') {
+                const delimiter = readLatexDelimiter(math, command.end);
+
+                if (delimiter && openDelimiterCount > 0 && isClosingDelimiter(delimiter.value)) {
+                    result += `\\right${math.slice(command.end, delimiter.end)}`;
+                    openDelimiterCount -= 1;
+                    index = delimiter.end;
+                    continue;
+                }
+
+                if (delimiter) {
+                    openDelimiterCount += 1;
+                }
+            }
+
+            if (command?.name === 'right' && openDelimiterCount > 0) {
+                openDelimiterCount -= 1;
+            }
+        }
+
+        result += math[index];
+        index += 1;
+    }
+
+    return result;
+}
+
+function findInlineMathEnd(content: string, from: number) {
+    for (let index = from; index < content.length; index += 1) {
+        if (content[index] === '$' && content[index - 1] !== '\\') {
+            return index;
+        }
+    }
+
+    return -1;
+}
+
+function readLatexCommand(content: string, from: number) {
+    const match = /^\\([A-Za-z]+)/.exec(content.slice(from));
+
+    if (!match) {
+        return null;
+    }
+
+    return {
+        end: from + match[0].length,
+        name: match[1],
+    };
+}
+
+function readLatexDelimiter(content: string, from: number) {
+    let index = from;
+
+    while (/\s/.test(content[index] ?? '')) {
+        index += 1;
+    }
+
+    if (content[index] === '\\') {
+        const command = readLatexCommand(content, index);
+
+        if (command) {
+            return {
+                end: command.end,
+                value: content.slice(index, command.end),
+            };
+        }
+    }
+
+    if (content[index]) {
+        return {
+            end: index + 1,
+            value: content[index],
+        };
+    }
+
+    return null;
+}
+
+function isOpeningDelimiter(delimiter: string) {
+    return delimiter === '(' || delimiter === '[' || delimiter === '\\{';
+}
+
+function isClosingDelimiter(delimiter: string) {
+    return delimiter === ')' || delimiter === ']' || delimiter === '\\}';
 }
 
 function pushTextSegment(segments: MarkdownSegment[], content: string) {

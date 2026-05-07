@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageHeader } from '@/components/layout/pageHeader';
 import { Card, CardHeader, SummaryCard } from '@/components/ui/card';
+import { MarkdownTex } from '@/components/ui/markdownTex';
 import { getProblemListView } from '@/lib/backend/problemViews';
 
 export const metadata: Metadata = {
@@ -194,6 +195,22 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                                                 編集
                                             </Link>
                                         </div>
+
+                                        <details className="border-t border-slate-200 pt-3 lg:col-span-4">
+                                            <summary className="cursor-pointer text-xs font-semibold text-slate-700 transition hover:text-slate-950">
+                                                問題文を表示
+                                            </summary>
+                                            <div className="mt-3 bg-white p-4 ring-1 ring-slate-200">
+                                                {problem.statement.trim().length > 0 ? (
+                                                    <MarkdownTex
+                                                        content={problem.statement}
+                                                        className="text-sm text-slate-800"
+                                                    />
+                                                ) : (
+                                                    <p className="text-sm text-slate-500">問題文は未登録です。</p>
+                                                )}
+                                            </div>
+                                        </details>
                                     </article>
                                 ))
                             )}
