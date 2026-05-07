@@ -63,7 +63,8 @@ export async function createProblemAction(formData: FormData) {
     });
 
     revalidatePath('/problems');
-    redirect(`/problems/${problem.id}/edit/metadata`);
+    revalidatePath(`/problems/${problem.id}`);
+    redirect(`/problems/${problem.id}`);
 }
 
 export async function saveProblemMetadataAction(problemId: string, formData: FormData) {
@@ -82,7 +83,7 @@ export async function saveProblemMetadataAction(problemId: string, formData: For
 
     revalidatePath('/problems');
     revalidatePath(`/problems/${problemId}`);
-    redirect(`/problems/${problemId}/edit/metadata`);
+    redirect(`/problems/${problemId}`);
 }
 
 export async function saveProblemTextAction(problemId: string, formData: FormData) {
@@ -97,7 +98,7 @@ export async function saveProblemTextAction(problemId: string, formData: FormDat
     });
 
     revalidatePath(`/problems/${problemId}`);
-    redirect(`/problems/${problemId}/edit/text`);
+    redirect(`/problems/${problemId}`);
 }
 
 export async function saveProblemPublishAction(problemId: string, formData: FormData) {
@@ -116,7 +117,7 @@ export async function saveProblemPublishAction(problemId: string, formData: Form
     });
 
     revalidatePath(`/problems/${problemId}`);
-    redirect(`/problems/${problemId}/edit/publish`);
+    redirect(`/problems/${problemId}`);
 }
 
 export async function deleteProblemAction(formData: FormData) {

@@ -104,6 +104,23 @@ button {
   padding-left: 0.9rem;
 }
 
+.markdown-preview details {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.25rem;
+  background: #f8fafc;
+  padding: 0.75rem 1rem;
+}
+
+.markdown-preview summary {
+  cursor: pointer;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.markdown-preview summary + * {
+  margin-top: 0.75rem;
+}
+
 .markdown-preview code {
   border-radius: 0.125rem;
   background: #e2e8f0;

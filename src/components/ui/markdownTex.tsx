@@ -1,8 +1,10 @@
 import ReactMarkdown from "react-markdown";
-import rehypeKatex from "rehype-katex";
-import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
-import { normalizeDisplayMathBlocks } from "@/lib/markdown";
+import {
+    markdownRehypePlugins,
+    markdownRemarkPlugins,
+    normalizeDisplayMathBlocks,
+    parseDetailsBlocks,
+} from "@/lib/markdown";
 
 type MarkdownTexProps = {
     content: string;
@@ -10,8 +12,6 @@ type MarkdownTexProps = {
 };
 
 export function MarkdownTex({ content, className }: MarkdownTexProps) {
-    const normalizedContent = normalizeDisplayMathBlocks(content);
-
     return (
         <div
             className={[
@@ -28,15 +28,54 @@ export function MarkdownTex({ content, className }: MarkdownTexProps) {
                 "[&_table]:my-4 [&_table]:w-full [&_table]:border-collapse",
                 "[&_th]:border [&_th]:border-slate-200 [&_th]:bg-slate-50 [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-semibold",
                 "[&_td]:border [&_td]:border-slate-200 [&_td]:px-3 [&_td]:py-2",
+                "[&_details]:my-3 [&_details]:rounded [&_details]:border [&_details]:border-slate-200 [&_details]:bg-slate-50 [&_details]:px-4 [&_details]:py-3",
+                "[&_summary]:cursor-pointer [&_summary]:font-semibold [&_summary]:text-slate-900",
+                "[&_summary+*]:mt-3",
                 "[&_code]:rounded [&_code]:bg-slate-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-[0.92em]",
                 "[&_pre]:overflow-x-auto [&_pre]:bg-slate-950 [&_pre]:p-4 [&_pre]:text-slate-100",
                 "[&_pre_code]:bg-transparent [&_pre_code]:p-0",
                 className ?? "",
             ].join(" ")}
         >
-            <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-                {normalizedContent}
-            </ReactMarkdown>
+            <MarkdownTexContent content={content} />
         </div>
+    );
+}
+
+type MarkdownTexContentProps = {
+    content: string;
+    inlineParagraphs?: boolean;
+};
+
+export function MarkdownTexContent({ content, inlineParagraphs = false }: MarkdownTexContentProps) {
+    const normalizedContent = normalizeDisplayMathBlocks(content);
+    const segments = parseDetailsBlocks(normalizedContent);
+
+    return (
+        <>
+            {segments.map((segment, index) => {
+                if (segment.type === "details") {
+                    return (
+                        <details key={index} open={segment.open}>
+                            <summary>
+                                <MarkdownTexContent content={segment.summary} inlineParagraphs />
+                            </summary>
+                            <MarkdownTexContent content={segment.body} />
+                        </details>
+                    );
+                }
+
+                return (
+                    <ReactMarkdown
+                        key={index}
+                        remarkPlugins={markdownRemarkPlugins}
+                        rehypePlugins={markdownRehypePlugins}
+                        components={inlineParagraphs ? { p: ({ children }) => <>{children}</> } : undefined}
+                    >
+                        {segment.content}
+                    </ReactMarkdown>
+                );
+            })}
+        </>
     );
 }

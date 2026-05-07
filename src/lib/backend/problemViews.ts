@@ -277,14 +277,33 @@ export async function getProblemEditScreenData(problemId: string): Promise<Probl
 }
 
 export async function getProblemListView(query: ProblemListQuery) {
-    const response = await listProblems(query);
+    const [response, totalCount, draftCount, publishedCount] = await Promise.all([
+        listProblems(query),
+        prisma.problem.count({
+            where: {
+                archivedAt: null,
+            },
+        }),
+        prisma.problem.count({
+            where: {
+                archivedAt: null,
+                status: 'draft',
+            },
+        }),
+        prisma.problem.count({
+            where: {
+                archivedAt: null,
+                status: 'published',
+            },
+        }),
+    ]);
 
     return {
         ...response,
         summary: {
-            total: response.total,
-            draft: response.items.filter((item) => item.status === 'draft').length,
-            published: response.items.filter((item) => item.status === 'published').length,
+            total: totalCount,
+            draft: draftCount,
+            published: publishedCount,
         },
     };
 }
