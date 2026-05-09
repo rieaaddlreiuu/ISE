@@ -437,3 +437,93 @@ html[data-theme="dark"] .markdown-preview th,
 html[data-theme="dark"] .markdown-preview td {
   border-color: var(--border);
 }
+
+.problem-statement-export.problem-statement-capturing {
+  background: #ffffff !important;
+  color: #334155 !important;
+}
+
+.problem-statement-export.problem-statement-capturing :where(p, li, td, dd, span):not(.katex *):not(.katex) {
+  color: #334155 !important;
+}
+
+.problem-statement-export.problem-statement-capturing :where(h1, h2, h3, h4, summary, strong, blockquote):not(.katex *):not(.katex) {
+  color: #0f172a !important;
+}
+
+.problem-statement-export.problem-statement-capturing blockquote {
+  border-left-color: #e2e8f0 !important;
+}
+
+.problem-statement-export.problem-statement-capturing :where(details, th) {
+  background: #f8fafc !important;
+}
+
+.problem-statement-export.problem-statement-capturing :where(details, th, td) {
+  border-color: #cbd5e1 !important;
+}
+
+.problem-statement-export.problem-statement-capturing :where(code):not(pre code) {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.problem-statement-export.problem-statement-capturing pre {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+.problem-statement-export.problem-statement-capturing pre code {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.problem-statement-export.problem-statement-capturing .katex,
+.problem-statement-export.problem-statement-capturing .katex * {
+  color: #0f172a !important;
+}
+
+.problem-statement-export.problem-statement-capturing .katex-display {
+  text-align: center !important;
+}
+
+html[data-theme="dark"] .problem-statement-export.problem-statement-capturing {
+  background: #101722 !important;
+  color: #cbd5e1 !important;
+  --tw-ring-color: #2b3a4f !important;
+}
+
+html[data-theme="dark"] .problem-statement-export.problem-statement-capturing :where(p, li, td, dd, span):not(.katex *):not(.katex) {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .problem-statement-export.problem-statement-capturing :where(h1, h2, h3, h4, summary, strong, blockquote):not(.katex *):not(.katex) {
+  color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .problem-statement-export.problem-statement-capturing blockquote {
+  border-left-color: #3f5068 !important;
+}
+
+html[data-theme="dark"] .problem-statement-export.problem-statement-capturing :where(details, th) {
+  background: #151f2d !important;
+}
+
+html[data-theme="dark"] .problem-statement-export.problem-statement-capturing :where(details, th, td) {
+  border-color: #2b3a4f !important;
+}
+
+html[data-theme="dark"] .problem-statement-export.problem-statement-capturing :where(code):not(pre code) {
+  background: #1b2737 !important;
+  color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .problem-statement-export.problem-statement-capturing pre {
+  background: #030712 !important;
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .problem-statement-export.problem-statement-capturing .katex,
+html[data-theme="dark"] .problem-statement-export.problem-statement-capturing .katex * {
+  color: #f8fafc !important;
+}

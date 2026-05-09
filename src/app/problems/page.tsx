@@ -153,9 +153,7 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                                     >
                                         <div className="space-y-2">
                                             <div className="flex flex-wrap items-center gap-2">
-                                                <span className="rounded bg-slate-900 px-2 py-1 text-[11px] font-semibold tracking-[0.18em] text-white">
-                                                    {problem.serialCode}
-                                                </span>
+
                                                 <span className="text-xs text-slate-500">{problem.subject}</span>
                                             </div>
                                             <h2 className="text-sm font-semibold text-slate-900">{problem.title}</h2>
@@ -166,15 +164,13 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
 
                                         <div className="space-y-2 text-sm">
                                             <div>
-                                                <div className="text-xs text-slate-500">難易度</div>
                                                 <div className="mt-1 text-slate-900">
-                                                    <DifficultyValue value={problem.difficultySelf} />
+                                                    難易度 : <DifficultyValue value={problem.difficultySelf} />
                                                 </div>
                                             </div>
                                             <div>
-                                                <div className="text-xs text-slate-500">形式</div>
                                                 <div className="mt-1 text-slate-900">
-                                                    {problem.targetLevel ?? '-'}
+                                                    形式 : {problem.targetLevel ?? '-'}
                                                 </div>
                                             </div>
                                         </div>

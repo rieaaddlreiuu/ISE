@@ -6,6 +6,7 @@ import { ProblemAssetsPanel } from '@/components/problems/problemAssetsPanel';
 import { CopyableTextBlock } from '@/components/problems/copyableTextBlock';
 import { DeleteProblemButton } from '@/components/problems/deleteProblemButton';
 import { DifficultyValue } from '@/components/problems/difficultyValue';
+import { DownloadableProblemTextBlock } from '@/components/problems/downloadableProblemTextBlock';
 import { getProblemEditSections } from '@/components/problems/problemEditShell';
 import { PageHeader } from '@/components/layout/pageHeader';
 import { Card, CardHeader } from '@/components/ui/card';
@@ -119,9 +120,13 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
             label: '問題文',
             content: (
                 <div className="space-y-5 px-1 py-2">
-                    <CopyableTextBlock text={problem.statement} label="問題文">
+                    <DownloadableProblemTextBlock
+                        text={problem.statement}
+                        label="問題文"
+                        filename={`${problem.id}-statement.png`}
+                    >
                         <MarkdownTex content={problem.statement} className="text-slate-800" />
-                    </CopyableTextBlock>
+                    </DownloadableProblemTextBlock>
                     <div className="flex flex-wrap gap-2">
                         {problem.tags.map((tag) => (
                             <span
