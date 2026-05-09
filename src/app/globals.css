@@ -325,8 +325,23 @@ html[data-theme="dark"] .tab-trigger-active-description {
 }
 
 .markdown-preview blockquote {
-  border-left: 3px solid #cbd5e1;
+  color: #0f172a;
+  border-left: 3px solid #f1f5f9;
   padding-left: 0.9rem;
+}
+
+.markdown-rendered blockquote {
+  color: #0f172a;
+  border-left-color: #f1f5f9;
+}
+
+.markdown-rendered blockquote p,
+.markdown-rendered blockquote li,
+.markdown-rendered blockquote .katex,
+.markdown-preview blockquote p,
+.markdown-preview blockquote li,
+.markdown-preview blockquote .katex {
+  color: inherit;
 }
 
 .markdown-preview details {
@@ -392,7 +407,13 @@ html[data-theme="dark"] .markdown-preview blockquote {
 }
 
 html[data-theme="dark"] .markdown-preview blockquote {
-  border-left-color: var(--border-strong);
+  color: var(--foreground);
+  border-left-color: var(--border);
+}
+
+html[data-theme="dark"] .markdown-rendered blockquote {
+  color: var(--foreground);
+  border-left-color: var(--border);
 }
 
 html[data-theme="dark"] .markdown-preview details {

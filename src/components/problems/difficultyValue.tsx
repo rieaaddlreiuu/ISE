@@ -13,7 +13,7 @@ export function DifficultyValue({ value, fallback = '-' }: DifficultyValueProps)
     }
 
     if (value === 11) {
-        return <span className="font-semibold text-red-600">{value}</span>;
+        return <span className="font-semibold text-[#ff0000]">{value}</span>;
     }
 
     return <>{value}</>;

@@ -15,6 +15,7 @@ export function MarkdownTex({ content, className }: MarkdownTexProps) {
     return (
         <div
             className={[
+                "markdown-rendered",
                 "text-sm leading-7 text-slate-700",
                 "[&_h1]:text-xl [&_h1]:font-semibold [&_h1]:text-slate-900",
                 "[&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-slate-900",
@@ -23,7 +24,7 @@ export function MarkdownTex({ content, className }: MarkdownTexProps) {
                 "[&_p]:my-3 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0",
                 "[&_ul]:my-3 [&_ol]:my-3 [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-6 [&_ol]:pl-6",
                 "[&_li]:my-1",
-                "[&_blockquote]:border-l-4 [&_blockquote]:border-slate-300 [&_blockquote]:pl-4 [&_blockquote]:text-slate-600",
+                "dark:[&_blockquote]:border-slate-700 dark:[&_blockquote]:text-slate-200 [&_blockquote]:border-l-4 [&_blockquote]:border-slate-100 [&_blockquote]:pl-4 [&_blockquote]:text-slate-900",
                 "[&_hr]:my-6 [&_hr]:border-slate-200",
                 "[&_table]:my-4 [&_table]:w-full [&_table]:border-collapse",
                 "[&_th]:border [&_th]:border-slate-200 [&_th]:bg-slate-50 [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-semibold",

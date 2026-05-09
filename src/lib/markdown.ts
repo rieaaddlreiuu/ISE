@@ -79,17 +79,20 @@ export function parseDetailsBlocks(content: string): MarkdownSegment[] {
 }
 
 export function normalizeDisplayMathBlocks(content: string) {
+    content = normalizeBlockquoteHtml(content);
+
     let result = '';
     let index = 0;
     let inDisplayMath = false;
 
     while (index < content.length) {
         if (content.slice(index, index + 2) === '$$') {
-            const previousChar = result.at(-1);
+            const quotePrefix = getActiveBlockquotePrefix(result);
+            const previousChar = getPreviousContentChar(result, quotePrefix);
             const nextChar = content[index + 2];
 
             if (previousChar && previousChar !== '\n') {
-                result += '\n';
+                result += `\n${quotePrefix}`;
             }
 
             result += '$$';
@@ -97,10 +100,10 @@ export function normalizeDisplayMathBlocks(content: string) {
 
             if (!inDisplayMath) {
                 if (nextChar && nextChar !== '\n') {
-                    result += '\n';
+                    result += `\n${quotePrefix}`;
                 }
             } else if (nextChar && nextChar !== '\n') {
-                result += '\n';
+                result += `\n${quotePrefix}`;
             }
 
             index += 2;
@@ -112,6 +115,76 @@ export function normalizeDisplayMathBlocks(content: string) {
     }
 
     return normalizeLatexDelimiters(result);
+}
+
+function normalizeBlockquoteHtml(content: string) {
+    let result = '';
+    let cursor = 0;
+
+    while (cursor < content.length) {
+        const start = findNextTagStart(content, cursor, 'blockquote');
+
+        if (!start) {
+            result += content.slice(cursor);
+            break;
+        }
+
+        result += content.slice(cursor, start.index);
+
+        const close = findMatchingTagClose(content, start.end, 'blockquote');
+
+        if (!close) {
+            result += content.slice(start.index);
+            break;
+        }
+
+        const inner = normalizeBlockquoteHtml(content.slice(start.end, close.index)).trim();
+        const quoted = toMarkdownBlockquote(inner);
+
+        if (result.length > 0 && !result.endsWith('\n')) {
+            result += '\n';
+        }
+
+        result += quoted;
+
+        if (close.end < content.length && content[close.end] !== '\n') {
+            result += '\n';
+        }
+
+        cursor = close.end;
+    }
+
+    return result;
+}
+
+function toMarkdownBlockquote(content: string) {
+    const normalized = content.replace(/\r\n?/g, '\n');
+    const lines = normalized.length > 0 ? normalized.split('\n') : [''];
+
+    return lines.map((line) => (line.length > 0 ? `> ${line}` : '>')).join('\n');
+}
+
+function getActiveBlockquotePrefix(content: string) {
+    const lineStart = content.lastIndexOf('\n') + 1;
+    const line = content.slice(lineStart);
+    const match = /^(>\s*)+/.exec(line);
+
+    return match?.[0] ?? '';
+}
+
+function getPreviousContentChar(content: string, quotePrefix: string) {
+    if (!quotePrefix) {
+        return content.at(-1);
+    }
+
+    const lineStart = content.lastIndexOf('\n') + 1;
+    const line = content.slice(lineStart);
+
+    if (line === quotePrefix) {
+        return '\n';
+    }
+
+    return content.at(-1);
 }
 
 function normalizeLatexDelimiters(content: string) {
@@ -275,61 +348,11 @@ function pushTextSegment(segments: MarkdownSegment[], content: string) {
 }
 
 function findNextDetailsStart(content: string, from: number) {
-    const match = /<details\b/i.exec(content.slice(from));
-
-    if (!match) {
-        return null;
-    }
-
-    const index = from + match.index;
-    const end = findTagEnd(content, index);
-
-    if (end === -1) {
-        return null;
-    }
-
-    return {
-        end: end + 1,
-        index,
-        tag: content.slice(index, end + 1),
-    };
+    return findNextTagStart(content, from, 'details');
 }
 
 function findMatchingDetailsClose(content: string, from: number) {
-    const tagPattern = /<\/?details\b/gi;
-    tagPattern.lastIndex = from;
-    let depth = 1;
-
-    while (true) {
-        const match = tagPattern.exec(content);
-
-        if (!match) {
-            return null;
-        }
-
-        const tagEnd = findTagEnd(content, match.index);
-
-        if (tagEnd === -1) {
-            return null;
-        }
-
-        const tag = content.slice(match.index, tagEnd + 1);
-
-        if (tag.startsWith("</")) {
-            depth -= 1;
-
-            if (depth === 0) {
-                return {
-                    end: tagEnd + 1,
-                    index: match.index,
-                };
-            }
-        } else if (!tag.endsWith("/>")) {
-            depth += 1;
-        }
-
-        tagPattern.lastIndex = tagEnd + 1;
-    }
+    return findMatchingTagClose(content, from, 'details');
 }
 
 function extractSummary(content: string) {
@@ -384,4 +407,62 @@ function findTagEnd(content: string, from: number) {
     }
 
     return -1;
+}
+
+function findNextTagStart(content: string, from: number, tagName: string) {
+    const match = new RegExp(`<${tagName}\\b`, 'i').exec(content.slice(from));
+
+    if (!match) {
+        return null;
+    }
+
+    const index = from + match.index;
+    const end = findTagEnd(content, index);
+
+    if (end === -1) {
+        return null;
+    }
+
+    return {
+        end: end + 1,
+        index,
+        tag: content.slice(index, end + 1),
+    };
+}
+
+function findMatchingTagClose(content: string, from: number, tagName: string) {
+    const tagPattern = new RegExp(`</?${tagName}\\b`, 'gi');
+    tagPattern.lastIndex = from;
+    let depth = 1;
+
+    while (true) {
+        const match = tagPattern.exec(content);
+
+        if (!match) {
+            return null;
+        }
+
+        const tagEnd = findTagEnd(content, match.index);
+
+        if (tagEnd === -1) {
+            return null;
+        }
+
+        const tag = content.slice(match.index, tagEnd + 1);
+
+        if (tag.startsWith("</")) {
+            depth -= 1;
+
+            if (depth === 0) {
+                return {
+                    end: tagEnd + 1,
+                    index: match.index,
+                };
+            }
+        } else if (!tag.endsWith("/>")) {
+            depth += 1;
+        }
+
+        tagPattern.lastIndex = tagEnd + 1;
+    }
 }

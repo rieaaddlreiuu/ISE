@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack -H localhost",
+    "predev": "prisma generate",
+    "dev": "next dev --webpack",
+    "preview:mobile": "next build && next start -H 0.0.0.0",
+    "prebuild": "prisma generate",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
