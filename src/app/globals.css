@@ -416,6 +416,15 @@ html[data-theme="dark"] .markdown-rendered blockquote {
   border-left-color: var(--border);
 }
 
+html[data-theme="dark"] .markdown-rendered details {
+  border-color: var(--border);
+  background: var(--surface-muted);
+}
+
+html[data-theme="dark"] .markdown-rendered summary {
+  color: var(--foreground);
+}
+
 html[data-theme="dark"] .markdown-preview details {
   border-color: var(--border);
   background: var(--surface-muted);
