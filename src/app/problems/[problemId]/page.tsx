@@ -10,7 +10,6 @@ import { DownloadableProblemTextBlock } from '@/components/problems/downloadable
 import { getProblemEditSections } from '@/components/problems/problemEditShell';
 import { PageHeader } from '@/components/layout/pageHeader';
 import { Card, CardHeader } from '@/components/ui/card';
-import { MarkdownTex } from '@/components/ui/markdownTex';
 import { Tabs } from '@/components/ui/tabs';
 import { getProblemDetailView, getProblemRecord } from '@/lib/backend/problemViews';
 
@@ -124,9 +123,9 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
                         text={problem.statement}
                         label="問題文"
                         filename={`${problem.id}-statement.png`}
-                    >
-                        <MarkdownTex content={problem.statement} className="text-slate-800" />
-                    </DownloadableProblemTextBlock>
+                        enableNotationTransform
+                        markdownClassName="text-slate-800"
+                    />
                     <div className="flex flex-wrap gap-2">
                         {problem.tags.map((tag) => (
                             <span
@@ -147,15 +146,11 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
                 <div className="space-y-8 px-1 py-2">
                     <section className="space-y-3">
                         <h2 className="text-sm font-semibold text-slate-900">解答</h2>
-                        <CopyableTextBlock text={problem.answer} label="解答">
-                            <MarkdownTex content={problem.answer} />
-                        </CopyableTextBlock>
+                        <CopyableTextBlock text={problem.answer} label="解答" enableNotationTransform />
                     </section>
                     <section className="space-y-3">
                         <h2 className="text-sm font-semibold text-slate-900">解説</h2>
-                        <CopyableTextBlock text={problem.commentary} label="解説">
-                            <MarkdownTex content={problem.commentary} />
-                        </CopyableTextBlock>
+                        <CopyableTextBlock text={problem.commentary} label="解説" enableNotationTransform />
                     </section>
                 </div>
             ),

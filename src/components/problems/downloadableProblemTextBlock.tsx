@@ -1,6 +1,12 @@
 'use client';
 
 import { useRef, useState, type ReactNode } from 'react';
+import { MarkdownTex } from '@/components/ui/markdownTex';
+import {
+    applyNotationTransform,
+    notationTransformOptions,
+    type NotationTransformMode,
+} from '@/utils/notationTransform';
 
 type ActionState = 'idle' | 'working' | 'done' | 'failed';
 
@@ -8,17 +14,28 @@ type DownloadableProblemTextBlockProps = {
     text: string;
     label: string;
     filename: string;
-    children: ReactNode;
+    children?: ReactNode;
+    enableNotationTransform?: boolean;
+    markdownClassName?: string;
 };
 
-export function DownloadableProblemTextBlock({ text, label, filename, children }: DownloadableProblemTextBlockProps) {
+export function DownloadableProblemTextBlock({
+    text,
+    label,
+    filename,
+    children,
+    enableNotationTransform = false,
+    markdownClassName,
+}: DownloadableProblemTextBlockProps) {
     const contentRef = useRef<HTMLDivElement>(null);
     const [copyState, setCopyState] = useState<ActionState>('idle');
     const [downloadState, setDownloadState] = useState<ActionState>('idle');
+    const [notationMode, setNotationMode] = useState<NotationTransformMode>('source');
+    const displayText = applyNotationTransform(text, notationMode);
 
     async function handleCopy() {
         try {
-            await copyToClipboard(text);
+            await copyToClipboard(displayText);
             setCopyState('done');
         } catch {
             setCopyState('failed');
@@ -51,16 +68,19 @@ export function DownloadableProblemTextBlock({ text, label, filename, children }
               ? '画像を保存しました'
               : downloadState === 'failed'
                 ? '画像保存に失敗'
-                : 'PNG画像としてDL';
+                : 'PNG画像としてダウンロード';
 
     return (
-        <div className="relative pb-7">
+        <div className="relative pb-11">
             <div ref={contentRef} className="problem-statement-export bg-white p-5">
-                {children}
+                {enableNotationTransform ? <MarkdownTex content={displayText} className={markdownClassName} /> : children}
             </div>
             <div className="absolute bottom-0 right-0 flex items-center gap-1">
+                {enableNotationTransform ? (
+                    <NotationTransformControl label={label} value={notationMode} onChange={setNotationMode} />
+                ) : null}
                 <IconButton
-                    label={`${label}を画像としてDL`}
+                    label={`${label}を画像としてダウンロード`}
                     title={downloadTitle}
                     onClick={handleDownload}
                     tone={downloadState === 'failed' ? 'danger' : downloadState === 'done' ? 'success' : 'default'}
@@ -77,6 +97,36 @@ export function DownloadableProblemTextBlock({ text, label, filename, children }
                     {copyState === 'done' ? <CheckIcon /> : <CopyIcon />}
                 </IconButton>
             </div>
+        </div>
+    );
+}
+
+type NotationTransformControlProps = {
+    label: string;
+    value: NotationTransformMode;
+    onChange: (value: NotationTransformMode) => void;
+};
+
+function NotationTransformControl({ label, value, onChange }: NotationTransformControlProps) {
+    return (
+        <div className="flex items-center border border-slate-200 bg-white" aria-label={`${label}の表記変換`}>
+            {notationTransformOptions.map((option) => (
+                <button
+                    key={option.mode}
+                    type="button"
+                    onClick={() => onChange(option.mode)}
+                    className={`inline-flex h-8 min-w-8 items-center justify-center px-2 text-xs transition focus:outline-none focus:ring-2 focus:ring-slate-300 ${
+                        value === option.mode
+                            ? 'bg-slate-900 text-white'
+                            : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                    aria-pressed={value === option.mode}
+                    aria-label={`${label}の${option.title}`}
+                    title={option.title}
+                >
+                    {option.label}
+                </button>
+            ))}
         </div>
     );
 }
