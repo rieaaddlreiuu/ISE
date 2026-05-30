@@ -184,7 +184,9 @@ async function downloadElementAsPng(element: HTMLElement, filename: string) {
     await document.fonts?.ready;
 
     const { toBlob } = await import('html-to-image');
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    const exportScale = 4;
+    const exportWidth = Math.max(1, Math.ceil(element.scrollWidth));
+    const exportHeight = Math.max(1, Math.ceil(element.scrollHeight));
     const backgroundColor = isDarkTheme() ? '#101722' : '#ffffff';
     element.classList.add('problem-statement-capturing');
 
@@ -193,7 +195,11 @@ async function downloadElementAsPng(element: HTMLElement, filename: string) {
         await waitForPaint();
         blob = await toBlob(element, {
             backgroundColor,
-            pixelRatio,
+            width: exportWidth,
+            height: exportHeight,
+            canvasWidth: exportWidth * exportScale,
+            canvasHeight: exportHeight * exportScale,
+            pixelRatio: 1,
             cacheBust: true,
             style: {
                 backgroundColor,
