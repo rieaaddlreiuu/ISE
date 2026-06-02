@@ -227,6 +227,8 @@ function normalizeLatexDelimiters(content: string) {
 }
 
 function normalizeLatexDelimiterCommands(math: string) {
+    math = normalizeLatexMultilineSumLimits(math);
+
     let result = '';
     let index = 0;
     let openDelimiterCount = 0;
@@ -271,6 +273,106 @@ function normalizeLatexDelimiterCommands(math: string) {
     }
 
     return result;
+}
+
+function normalizeLatexMultilineSumLimits(math: string) {
+    let result = '';
+    let index = 0;
+
+    while (index < math.length) {
+        if (math[index] !== '\\') {
+            result += math[index];
+            index += 1;
+            continue;
+        }
+
+        const command = readLatexCommand(math, index);
+
+        if (command?.name !== 'sum') {
+            result += math[index];
+            index += 1;
+            continue;
+        }
+
+        result += math.slice(index, command.end);
+        index = command.end;
+
+        while (/\s/.test(math[index] ?? '')) {
+            result += math[index];
+            index += 1;
+        }
+
+        if (math[index] !== '_') {
+            continue;
+        }
+
+        const group = readLatexBraceGroup(math, index + 1);
+
+        if (!group) {
+            result += math[index];
+            index += 1;
+            continue;
+        }
+
+        result += `_{${normalizeLatexMultilineLimitGroup(group.content)}}`;
+        index = group.end;
+    }
+
+    return result;
+}
+
+function normalizeLatexMultilineLimitGroup(content: string) {
+    const normalized = content.replace(/\r\n?/g, '\n');
+
+    if (!normalized.includes('\n') || /\\(?:substack|begin\s*\{(?:array|subarray|aligned|gathered|matrix|cases)\})/.test(normalized)) {
+        return content;
+    }
+
+    const lines = normalized
+        .split('\n')
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0);
+
+    if (lines.length <= 1) {
+        return content;
+    }
+
+    return `\\substack{${lines.join('\\\\')}}`;
+}
+
+function readLatexBraceGroup(content: string, from: number) {
+    if (content[from] !== '{') {
+        return null;
+    }
+
+    let depth = 0;
+
+    for (let index = from; index < content.length; index += 1) {
+        const char = content[index];
+
+        if (char === '\\') {
+            index += 1;
+            continue;
+        }
+
+        if (char === '{') {
+            depth += 1;
+            continue;
+        }
+
+        if (char === '}') {
+            depth -= 1;
+
+            if (depth === 0) {
+                return {
+                    content: content.slice(from + 1, index),
+                    end: index + 1,
+                };
+            }
+        }
+    }
+
+    return null;
 }
 
 function findInlineMathEnd(content: string, from: number) {
