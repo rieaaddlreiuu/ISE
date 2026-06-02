@@ -1,8 +1,7 @@
 import { Prisma } from '@prisma/client';
-import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { authSessionCookieName, parseSessionToken } from '@/lib/auth/session';
 import { prisma } from '@/lib/prisma';
+import { requireApiTokenAuthorization } from '@/lib/security/apiTokenAuth';
 
 const allowedStatuses = new Set(['draft', 'review', 'ready', 'published']);
 const allowedSubjects = new Set(['math', 'physics', 'chemistry', 'japanese', 'english', 'other']);
@@ -321,17 +320,9 @@ function parseMetadataPatchBody(body: MetadataPatchBody) {
     };
 }
 
-async function requireAuthenticatedSession() {
-    const cookieStore = await cookies();
-    const rawToken = cookieStore.get(authSessionCookieName)?.value;
-    return parseSessionToken(rawToken);
-}
-
 export async function PATCH(request: NextRequest, context: RouteContext) {
-    const session = await requireAuthenticatedSession();
-    if (!session) {
-        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
+    const unauthorized = requireApiTokenAuthorization(request);
+    if (unauthorized) return unauthorized;
 
     const { id } = await context.params;
     if (!id || id.trim().length === 0) {

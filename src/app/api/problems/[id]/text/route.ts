@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireApiTokenAuthorization } from '@/lib/security/apiTokenAuth';
 
 type TextPatchBody = {
     statementMd?: unknown;
@@ -89,6 +90,9 @@ function parseTextPatchBody(body: TextPatchBody) {
 }
 
 export async function PATCH(request: NextRequest, context: RouteContext) {
+    const unauthorized = requireApiTokenAuthorization(request);
+    if (unauthorized) return unauthorized;
+
     const { id } = await context.params;
 
     if (!id || id.trim().length === 0) {

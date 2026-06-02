@@ -15,14 +15,14 @@ export async function resolveInternalApiBaseUrl() {
 }
 
 export async function internalApiFetch(pathname: string, init?: RequestInit) {
-    const cronSecret = process.env.CRON_SECRET?.trim();
-    if (!cronSecret) {
-        throw new Error('CRON_SECRET is not configured');
+    const apiToken = process.env.API_TOKEN?.trim();
+    if (!apiToken) {
+        throw new Error('API_TOKEN is not configured');
     }
 
     const baseUrl = await resolveInternalApiBaseUrl();
     const headers = new Headers(init?.headers);
-    headers.set('authorization', `Bearer ${cronSecret}`);
+    headers.set('authorization', `Bearer ${apiToken}`);
 
     return fetch(`${baseUrl}${pathname}`, {
         ...init,

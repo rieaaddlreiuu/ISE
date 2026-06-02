@@ -1,10 +1,14 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { ProblemListQueryError, listProblems } from '@/lib/backend/problems';
+import { requireApiTokenAuthorization } from '@/lib/security/apiTokenAuth';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
+    const unauthorized = requireApiTokenAuthorization(request);
+    if (unauthorized) return unauthorized;
+
     const { searchParams } = request.nextUrl;
 
     try {
