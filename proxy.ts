@@ -26,12 +26,6 @@ function unauthorizedResponse() {
   });
 }
 
-function serverMisconfiguredResponse() {
-  return new NextResponse('Server misconfigured: BASIC_AUTH_USER and BASIC_AUTH_PASSWORD are required', {
-    status: 503,
-  });
-}
-
 function parseBasicCredentials(authorization: string | null) {
   const prefix = 'Basic ';
   if (!authorization?.startsWith(prefix)) return null;
@@ -48,11 +42,7 @@ export function proxy(request: NextRequest) {
   const password = process.env.BASIC_AUTH_PASSWORD?.trim();
 
   if (!user || !password) {
-    if (process.env.NODE_ENV === 'production') {
-      return serverMisconfiguredResponse();
-    }
-
-    return NextResponse.next();
+    return unauthorizedResponse();
   }
 
   const providedCredentials = parseBasicCredentials(request.headers.get('authorization'));
@@ -69,7 +59,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*$).*)',
-  ],
+  matcher: '/:path*',
 };
