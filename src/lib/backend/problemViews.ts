@@ -165,7 +165,8 @@ export async function getProblemDetailView(problemId: string): Promise<ProblemDe
     const destinations = formatDestinations(problem.sourceType);
 
     return {
-        id: problem.serialCode,
+        id: problem.id,
+        serialCode: problem.serialCode,
         title: problem.title,
         subject: formatSubject(problem.subject),
         level: formatDifficulty(problem.difficultySelf),

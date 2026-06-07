@@ -77,7 +77,7 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
                             }
                         />
                         <dl className="grid gap-4 p-4 md:grid-cols-2 xl:grid-cols-4">
-                            <InfoItem label="問題コード" value={problem.id} />
+                            <InfoItem label="問題コード" value={problem.serialCode} />
                             <InfoItem label="科目" value={problem.subject} />
                             <InfoItem
                                 label="難易度"
@@ -122,7 +122,7 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
                     <DownloadableProblemTextBlock
                         text={problem.statement}
                         label="問題文"
-                        filename={`${problem.id}-statement.png`}
+                        filename={`${problem.serialCode}-statement.png`}
                         enableNotationTransform
                         markdownClassName="text-slate-800"
                     />

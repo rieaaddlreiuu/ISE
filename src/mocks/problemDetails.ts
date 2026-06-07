@@ -1,5 +1,6 @@
 export type ProblemDetail = {
     id: string;
+    serialCode: string;
     title: string;
     subject: string;
     level: string;
@@ -51,6 +52,7 @@ export type ProblemDetail = {
 const problemDetails: Record<string, ProblemDetail> = {
     "ALG-201": {
         id: "ALG-201",
+        serialCode: "ALG-201",
         title: "整数条件つきで最大値と最小値を求める問題",
         subject: "数学",
         level: "標準",
@@ -118,6 +120,7 @@ const problemDetails: Record<string, ProblemDetail> = {
     },
     "MTH-084": {
         id: "MTH-084",
+        serialCode: "MTH-084",
         title: "ベクトルの内積を使った図形証明",
         subject: "数学",
         level: "やや難",
@@ -175,6 +178,7 @@ const problemDetails: Record<string, ProblemDetail> = {
     },
     "JPN-031": {
         id: "JPN-031",
+        serialCode: "JPN-031",
         title: "論説文読解の根拠を説明する短答問題",
         subject: "国語",
         level: "標準",
@@ -223,6 +227,7 @@ const problemDetails: Record<string, ProblemDetail> = {
 function createFallbackProblemDetail(problemId: string): ProblemDetail {
     return {
         id: problemId,
+        serialCode: problemId,
         title: `${problemId} のモック問題詳細`,
         subject: "未設定",
         level: "未設定",
