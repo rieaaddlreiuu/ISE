@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useRef, useState, type ReactNode } from 'react';
-import { MarkdownTex } from '@/components/ui/markdownTex';
+import { useRef, useState, type ReactNode } from "react";
+import { MarkdownTex } from "@/components/ui/markdownTex";
 import {
     applyNotationTransform,
     notationTransformOptions,
     type NotationTransformMode,
-} from '@/utils/notationTransform';
+} from "@/utils/notationTransform";
 
-type ActionState = 'idle' | 'working' | 'done' | 'failed';
+type ActionState = "idle" | "working" | "done" | "failed";
 
 type DownloadableProblemTextBlockProps = {
     text: string;
@@ -28,20 +28,21 @@ export function DownloadableProblemTextBlock({
     markdownClassName,
 }: DownloadableProblemTextBlockProps) {
     const contentRef = useRef<HTMLDivElement>(null);
-    const [copyState, setCopyState] = useState<ActionState>('idle');
-    const [downloadState, setDownloadState] = useState<ActionState>('idle');
-    const [notationMode, setNotationMode] = useState<NotationTransformMode>('source');
+    const [copyState, setCopyState] = useState<ActionState>("idle");
+    const [downloadState, setDownloadState] = useState<ActionState>("idle");
+    const [notationMode, setNotationMode] =
+        useState<NotationTransformMode>("source");
     const displayText = applyNotationTransform(text, notationMode);
 
     async function handleCopy() {
         try {
             await copyToClipboard(displayText);
-            setCopyState('done');
+            setCopyState("done");
         } catch {
-            setCopyState('failed');
+            setCopyState("failed");
         }
 
-        window.setTimeout(() => setCopyState('idle'), 1600);
+        window.setTimeout(() => setCopyState("idle"), 1600);
     }
 
     async function handleDownload() {
@@ -50,51 +51,88 @@ export function DownloadableProblemTextBlock({
         }
 
         try {
-            setDownloadState('working');
+            setDownloadState("working");
             await downloadElementAsPng(contentRef.current, filename);
-            setDownloadState('done');
+            setDownloadState("done");
         } catch {
-            setDownloadState('failed');
+            setDownloadState("failed");
         }
 
-        window.setTimeout(() => setDownloadState('idle'), 1800);
+        window.setTimeout(() => setDownloadState("idle"), 1800);
     }
 
-    const copyTitle = copyState === 'done' ? 'コピー済み' : copyState === 'failed' ? 'コピー失敗' : 'コピー';
+    const copyTitle =
+        copyState === "done"
+            ? "コピー済み"
+            : copyState === "failed"
+              ? "コピー失敗"
+              : "コピー";
     const downloadTitle =
-        downloadState === 'working'
-            ? '画像を作成中'
-            : downloadState === 'done'
-              ? '画像を保存しました'
-              : downloadState === 'failed'
-                ? '画像保存に失敗'
-                : 'PNG画像としてダウンロード';
+        downloadState === "working"
+            ? "画像を作成中"
+            : downloadState === "done"
+              ? "画像を保存しました"
+              : downloadState === "failed"
+                ? "画像保存に失敗"
+                : "PNG画像としてダウンロード";
 
     return (
         <div className="relative pb-11">
-            <div ref={contentRef} className="problem-statement-export bg-white p-5">
-                {enableNotationTransform ? <MarkdownTex content={displayText} className={markdownClassName} /> : children}
+            <div
+                ref={contentRef}
+                className="problem-statement-export bg-white p-5"
+            >
+                {enableNotationTransform ? (
+                    <MarkdownTex
+                        content={displayText}
+                        className={markdownClassName}
+                    />
+                ) : (
+                    children
+                )}
             </div>
             <div className="absolute bottom-0 right-0 flex items-center gap-1">
                 {enableNotationTransform ? (
-                    <NotationTransformControl label={label} value={notationMode} onChange={setNotationMode} />
+                    <NotationTransformControl
+                        label={label}
+                        value={notationMode}
+                        onChange={setNotationMode}
+                    />
                 ) : null}
                 <IconButton
                     label={`${label}を画像としてダウンロード`}
                     title={downloadTitle}
                     onClick={handleDownload}
-                    tone={downloadState === 'failed' ? 'danger' : downloadState === 'done' ? 'success' : 'default'}
-                    disabled={downloadState === 'working'}
+                    tone={
+                        downloadState === "failed"
+                            ? "danger"
+                            : downloadState === "done"
+                              ? "success"
+                              : "default"
+                    }
+                    disabled={downloadState === "working"}
                 >
-                    {downloadState === 'working' ? <LoadingIcon /> : downloadState === 'done' ? <CheckIcon /> : <DownloadIcon />}
+                    {downloadState === "working" ? (
+                        <LoadingIcon />
+                    ) : downloadState === "done" ? (
+                        <CheckIcon />
+                    ) : (
+                        <DownloadIcon />
+                    )}
                 </IconButton>
                 <IconButton
                     label={`${label}をコピー`}
                     title={copyTitle}
                     onClick={handleCopy}
-                    tone={copyState === 'failed' ? 'danger' : copyState === 'done' ? 'success' : 'default'}
+                    tone={
+                        copyState === "failed"
+                            ? "danger"
+                            : copyState === "done"
+                              ? "success"
+                              : "default"
+                    }
                 >
-                    {copyState === 'done' ? <CheckIcon /> : <CopyIcon />}
+                    {copyState === "done" ? <CheckIcon /> : <CopyIcon />}
                 </IconButton>
             </div>
         </div>
@@ -107,9 +145,16 @@ type NotationTransformControlProps = {
     onChange: (value: NotationTransformMode) => void;
 };
 
-function NotationTransformControl({ label, value, onChange }: NotationTransformControlProps) {
+function NotationTransformControl({
+    label,
+    value,
+    onChange,
+}: NotationTransformControlProps) {
     return (
-        <div className="flex items-center border border-slate-200 bg-white" aria-label={`${label}の表記変換`}>
+        <div
+            className="flex items-center border border-slate-200 bg-white"
+            aria-label={`${label}の表記変換`}
+        >
             {notationTransformOptions.map((option) => (
                 <button
                     key={option.mode}
@@ -117,8 +162,8 @@ function NotationTransformControl({ label, value, onChange }: NotationTransformC
                     onClick={() => onChange(option.mode)}
                     className={`inline-flex h-8 min-w-8 items-center justify-center px-2 text-xs transition focus:outline-none focus:ring-2 focus:ring-slate-300 ${
                         value === option.mode
-                            ? 'bg-slate-900 text-white'
-                            : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                            ? "bg-slate-900 text-white"
+                            : "bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                     }`}
                     aria-pressed={value === option.mode}
                     aria-label={`${label}の${option.title}`}
@@ -135,14 +180,25 @@ type IconButtonProps = {
     label: string;
     title: string;
     onClick: () => void;
-    tone: 'default' | 'success' | 'danger';
+    tone: "default" | "success" | "danger";
     children: ReactNode;
     disabled?: boolean;
 };
 
-function IconButton({ label, title, onClick, tone, children, disabled = false }: IconButtonProps) {
+function IconButton({
+    label,
+    title,
+    onClick,
+    tone,
+    children,
+    disabled = false,
+}: IconButtonProps) {
     const colorClassName =
-        tone === 'success' ? 'text-emerald-600' : tone === 'danger' ? 'text-rose-600' : 'text-slate-600';
+        tone === "success"
+            ? "text-emerald-600"
+            : tone === "danger"
+              ? "text-rose-600"
+              : "text-slate-600";
 
     return (
         <button
@@ -153,14 +209,21 @@ function IconButton({ label, title, onClick, tone, children, disabled = false }:
             aria-label={label}
             title={title}
         >
-            <span className={`size-4 transition-colors ${colorClassName}`}>{children}</span>
+            <span className={`size-4 transition-colors ${colorClassName}`}>
+                {children}
+            </span>
         </button>
     );
 }
 
 function LoadingIcon() {
     return (
-        <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="size-4 animate-spin">
+        <svg
+            aria-hidden="true"
+            viewBox="0 0 20 20"
+            fill="none"
+            className="size-4 animate-spin"
+        >
             <path
                 d="M10 3.25A6.75 6.75 0 1 1 3.25 10"
                 stroke="currentColor"
@@ -173,7 +236,12 @@ function LoadingIcon() {
 
 function DownloadIcon() {
     return (
-        <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="size-4">
+        <svg
+            aria-hidden="true"
+            viewBox="0 0 20 20"
+            fill="none"
+            className="size-4"
+        >
             <path
                 d="M10 3.5V12M6.75 8.75L10 12L13.25 8.75M4 14.5V16.5H16V14.5"
                 stroke="currentColor"
@@ -187,7 +255,12 @@ function DownloadIcon() {
 
 function CheckIcon() {
     return (
-        <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="size-4">
+        <svg
+            aria-hidden="true"
+            viewBox="0 0 20 20"
+            fill="none"
+            className="size-4"
+        >
             <path
                 d="M4.5 10.5L8.25 14.25L15.5 6.75"
                 stroke="currentColor"
@@ -214,31 +287,31 @@ async function copyToClipboard(text: string) {
         return;
     }
 
-    const textarea = document.createElement('textarea');
+    const textarea = document.createElement("textarea");
     textarea.value = text;
-    textarea.setAttribute('readonly', '');
-    textarea.style.position = 'fixed';
-    textarea.style.left = '-9999px';
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
     document.body.appendChild(textarea);
     textarea.select();
 
-    const copied = document.execCommand('copy');
+    const copied = document.execCommand("copy");
     document.body.removeChild(textarea);
 
     if (!copied) {
-        throw new Error('Copy command failed');
+        throw new Error("Copy command failed");
     }
 }
 
 async function downloadElementAsPng(element: HTMLElement, filename: string) {
     await document.fonts?.ready;
 
-    const { toBlob } = await import('html-to-image');
+    const { toBlob } = await import("html-to-image");
     const exportScale = 4;
     const exportWidth = Math.max(1, Math.ceil(element.scrollWidth));
     const exportHeight = Math.max(1, Math.ceil(element.scrollHeight));
-    const backgroundColor = isDarkTheme() ? '#101722' : '#ffffff';
-    element.classList.add('problem-statement-capturing');
+    const backgroundColor = isDarkTheme() ? "#101722" : "#ffffff";
+    element.classList.add("problem-statement-capturing");
 
     let blob: Blob | null = null;
     try {
@@ -256,15 +329,15 @@ async function downloadElementAsPng(element: HTMLElement, filename: string) {
             },
         });
     } finally {
-        element.classList.remove('problem-statement-capturing');
+        element.classList.remove("problem-statement-capturing");
     }
 
     if (!blob) {
-        throw new Error('PNG encoding failed');
+        throw new Error("PNG encoding failed");
     }
 
     const pngUrl = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
+    const anchor = document.createElement("a");
     anchor.href = pngUrl;
     anchor.download = ensurePngFilename(filename);
     document.body.appendChild(anchor);
@@ -282,16 +355,18 @@ function waitForPaint() {
 }
 
 function isDarkTheme() {
-    return document.documentElement.dataset.theme === 'dark';
+    return document.documentElement.dataset.theme === "dark";
 }
 
 function ensurePngFilename(filename: string) {
     const sanitized = filename
         .trim()
-        .replace(/[\\/:*?"<>|]+/g, '-')
-        .replace(/\s+/g, '_')
+        .replace(/[\\/:*?"<>|]+/g, "-")
+        .replace(/\s+/g, "_")
         .slice(0, 120);
 
-    const baseName = sanitized.length > 0 ? sanitized : 'problem-statement';
-    return baseName.toLowerCase().endsWith('.png') ? baseName : `${baseName}.png`;
+    const baseName = sanitized.length > 0 ? sanitized : "problem-statement";
+    return baseName.toLowerCase().endsWith(".png")
+        ? baseName
+        : `${baseName}.png`;
 }

@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState, type ReactNode } from 'react';
-import { MarkdownTex } from '@/components/ui/markdownTex';
+import { useState, type ReactNode } from "react";
+import { MarkdownTex } from "@/components/ui/markdownTex";
 import {
     applyNotationTransform,
     notationTransformOptions,
     type NotationTransformMode,
-} from '@/utils/notationTransform';
+} from "@/utils/notationTransform";
 
-type CopyState = 'idle' | 'copied' | 'failed';
+type CopyState = "idle" | "copied" | "failed";
 
 type CopyableTextBlockProps = {
     text: string;
@@ -25,31 +25,52 @@ export function CopyableTextBlock({
     enableNotationTransform = false,
     markdownClassName,
 }: CopyableTextBlockProps) {
-    const [copyState, setCopyState] = useState<CopyState>('idle');
-    const [notationMode, setNotationMode] = useState<NotationTransformMode>('source');
+    const [copyState, setCopyState] = useState<CopyState>("idle");
+    const [notationMode, setNotationMode] =
+        useState<NotationTransformMode>("source");
     const displayText = applyNotationTransform(text, notationMode);
 
     async function handleCopy() {
         try {
             await copyToClipboard(displayText);
-            setCopyState('copied');
+            setCopyState("copied");
         } catch {
-            setCopyState('failed');
+            setCopyState("failed");
         }
 
-        window.setTimeout(() => setCopyState('idle'), 1600);
+        window.setTimeout(() => setCopyState("idle"), 1600);
     }
 
-    const statusLabel = copyState === 'copied' ? 'コピー済み' : copyState === 'failed' ? 'コピー失敗' : 'コピー';
+    const statusLabel =
+        copyState === "copied"
+            ? "コピー済み"
+            : copyState === "failed"
+              ? "コピー失敗"
+              : "コピー";
     const iconClassName =
-        copyState === 'copied' ? 'text-emerald-600' : copyState === 'failed' ? 'text-rose-600' : 'text-slate-600';
+        copyState === "copied"
+            ? "text-emerald-600"
+            : copyState === "failed"
+              ? "text-rose-600"
+              : "text-slate-600";
 
     return (
         <div className="relative pb-11">
-            {enableNotationTransform ? <MarkdownTex content={displayText} className={markdownClassName} /> : children}
+            {enableNotationTransform ? (
+                <MarkdownTex
+                    content={displayText}
+                    className={markdownClassName}
+                />
+            ) : (
+                children
+            )}
             <div className="absolute bottom-0 right-0 flex items-center gap-1">
                 {enableNotationTransform ? (
-                    <NotationTransformControl label={label} value={notationMode} onChange={setNotationMode} />
+                    <NotationTransformControl
+                        label={label}
+                        value={notationMode}
+                        onChange={setNotationMode}
+                    />
                 ) : null}
                 <button
                     type="button"
@@ -58,7 +79,7 @@ export function CopyableTextBlock({
                     aria-label={`${label}をコピー`}
                     title={statusLabel}
                 >
-                    {copyState === 'copied' ? (
+                    {copyState === "copied" ? (
                         <svg
                             aria-hidden="true"
                             viewBox="0 0 20 20"
@@ -74,7 +95,10 @@ export function CopyableTextBlock({
                             />
                         </svg>
                     ) : (
-                        <span aria-hidden="true" className={`relative block size-4 transition-colors ${iconClassName}`}>
+                        <span
+                            aria-hidden="true"
+                            className={`relative block size-4 transition-colors ${iconClassName}`}
+                        >
                             <span className="absolute left-0.5 top-0.5 block h-3 w-2.5 border border-current bg-white" />
                             <span className="absolute bottom-0 right-0 block h-3 w-2.5 border border-current bg-white" />
                         </span>
@@ -91,9 +115,16 @@ type NotationTransformControlProps = {
     onChange: (value: NotationTransformMode) => void;
 };
 
-function NotationTransformControl({ label, value, onChange }: NotationTransformControlProps) {
+function NotationTransformControl({
+    label,
+    value,
+    onChange,
+}: NotationTransformControlProps) {
     return (
-        <div className="flex items-center border border-slate-200 bg-white" aria-label={`${label}の表記変換`}>
+        <div
+            className="flex items-center border border-slate-200 bg-white"
+            aria-label={`${label}の表記変換`}
+        >
             {notationTransformOptions.map((option) => (
                 <button
                     key={option.mode}
@@ -101,8 +132,8 @@ function NotationTransformControl({ label, value, onChange }: NotationTransformC
                     onClick={() => onChange(option.mode)}
                     className={`inline-flex h-8 min-w-8 items-center justify-center px-2 text-xs transition focus:outline-none focus:ring-2 focus:ring-slate-300 ${
                         value === option.mode
-                            ? 'bg-slate-900 text-white'
-                            : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                            ? "bg-slate-900 text-white"
+                            : "bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                     }`}
                     aria-pressed={value === option.mode}
                     aria-label={`${label}の${option.title}`}
@@ -121,18 +152,18 @@ async function copyToClipboard(text: string) {
         return;
     }
 
-    const textarea = document.createElement('textarea');
+    const textarea = document.createElement("textarea");
     textarea.value = text;
-    textarea.setAttribute('readonly', '');
-    textarea.style.position = 'fixed';
-    textarea.style.left = '-9999px';
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
     document.body.appendChild(textarea);
     textarea.select();
 
-    const copied = document.execCommand('copy');
+    const copied = document.execCommand("copy");
     document.body.removeChild(textarea);
 
     if (!copied) {
-        throw new Error('Copy command failed');
+        throw new Error("Copy command failed");
     }
 }

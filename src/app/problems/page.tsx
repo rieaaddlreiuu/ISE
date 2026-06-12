@@ -1,16 +1,16 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { PageHeader } from '@/components/layout/pageHeader';
-import { CopyableTextBlock } from '@/components/problems/copyableTextBlock';
-import { DifficultyValue } from '@/components/problems/difficultyValue';
-import { ProblemSortControls } from '@/components/problems/problemSortControls';
-import { Card, CardHeader, SummaryCard } from '@/components/ui/card';
-import { MarkdownTex } from '@/components/ui/markdownTex';
-import { getProblemListView } from '@/lib/backend/problemViews';
+import type { Metadata } from "next";
+import Link from "next/link";
+import { PageHeader } from "@/components/layout/pageHeader";
+import { CopyableTextBlock } from "@/components/problems/copyableTextBlock";
+import { DifficultyValue } from "@/components/problems/difficultyValue";
+import { ProblemSortControls } from "@/components/problems/problemSortControls";
+import { Card, CardHeader, SummaryCard } from "@/components/ui/card";
+import { MarkdownTex } from "@/components/ui/markdownTex";
+import { getProblemListView } from "@/lib/backend/problemViews";
 
 export const metadata: Metadata = {
-    title: '問題一覧 | ISE',
-    description: 'データベースと接続された問題一覧',
+    title: "問題一覧 | ISE",
+    description: "データベースと接続された問題一覧",
 };
 
 type ProblemsPageProps = {
@@ -18,22 +18,24 @@ type ProblemsPageProps = {
 };
 
 function getValue(value: string | string[] | undefined) {
-    return typeof value === 'string' ? value : undefined;
+    return typeof value === "string" ? value : undefined;
 }
 
 function statusClassName(status: string) {
-    if (status === 'published') {
-        return 'bg-emerald-50 text-emerald-700 ring-emerald-200';
+    if (status === "published") {
+        return "bg-emerald-50 text-emerald-700 ring-emerald-200";
     }
 
-    if (status === 'review') {
-        return 'bg-amber-50 text-amber-700 ring-amber-200';
+    if (status === "review") {
+        return "bg-amber-50 text-amber-700 ring-amber-200";
     }
 
-    return 'bg-slate-100 text-slate-700 ring-slate-200';
+    return "bg-slate-100 text-slate-700 ring-slate-200";
 }
 
-export default async function ProblemsPage({ searchParams }: ProblemsPageProps) {
+export default async function ProblemsPage({
+    searchParams,
+}: ProblemsPageProps) {
     const params = await searchParams;
     const query = {
         q: getValue(params.q),
@@ -62,7 +64,7 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                             </Link>
                             <Link
                                 href="/problems/new"
-                                className="inline-flex items-center justify-center bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
+                                className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white transition "
                             >
                                 新規問題登録
                             </Link>
@@ -71,9 +73,21 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                 />
 
                 <section className="grid gap-4 md:grid-cols-3">
-                    <SummaryCard label="全問題数" value={summary.total} sub="DB に保存されている件数" />
-                    <SummaryCard label="下書き" value={summary.draft} sub="編集中の問題数" />
-                    <SummaryCard label="公開中" value={summary.published} sub="公開状態の問題数" />
+                    <SummaryCard
+                        label="全問題数"
+                        value={summary.total}
+                        sub="DB に保存されている件数"
+                    />
+                    <SummaryCard
+                        label="下書き"
+                        value={summary.draft}
+                        sub="編集中の問題数"
+                    />
+                    <SummaryCard
+                        label="公開中"
+                        value={summary.published}
+                        sub="公開状態の問題数"
+                    />
                 </section>
 
                 <section className="mt-6 grid gap-6">
@@ -84,20 +98,24 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                         />
                         <form className="grid gap-4 p-4 md:grid-cols-[1.4fr_repeat(2,minmax(0,1fr))]">
                             <label className="block">
-                                <span className="text-xs font-medium text-slate-600">検索</span>
+                                <span className="text-xs font-medium text-slate-600">
+                                    検索
+                                </span>
                                 <input
                                     type="text"
                                     name="q"
-                                    defaultValue={query.q ?? ''}
+                                    defaultValue={query.q ?? ""}
                                     placeholder="タイトル、問題コード、タグで検索"
                                     className="mt-2 w-full border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition placeholder:text-slate-400 focus:border-slate-900"
                                 />
                             </label>
                             <label className="block">
-                                <span className="text-xs font-medium text-slate-600">科目</span>
+                                <span className="text-xs font-medium text-slate-600">
+                                    科目
+                                </span>
                                 <select
                                     name="subject"
-                                    defaultValue={query.subject ?? ''}
+                                    defaultValue={query.subject ?? ""}
                                     className="mt-2 w-full border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
                                 >
                                     <option value="">すべて</option>
@@ -110,10 +128,12 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                                 </select>
                             </label>
                             <label className="block">
-                                <span className="text-xs font-medium text-slate-600">ステータス</span>
+                                <span className="text-xs font-medium text-slate-600">
+                                    ステータス
+                                </span>
                                 <select
                                     name="status"
-                                    defaultValue={query.status ?? ''}
+                                    defaultValue={query.status ?? ""}
                                     className="mt-2 w-full border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
                                 >
                                     <option value="">すべて</option>
@@ -126,7 +146,7 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                             <div className="md:col-span-3">
                                 <button
                                     type="submit"
-                                    className="inline-flex items-center justify-center bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
+                                    className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white transition "
                                 >
                                     絞り込む
                                 </button>
@@ -138,7 +158,12 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                         <CardHeader
                             title="問題一覧"
                             subtitle={`該当件数: ${total}件`}
-                            right={<ProblemSortControls sort={query.sort} order={query.order} />}
+                            right={
+                                <ProblemSortControls
+                                    sort={query.sort}
+                                    order={query.order}
+                                />
+                            }
                         />
                         <div className="space-y-3 p-4">
                             {items.length === 0 ? (
@@ -153,24 +178,36 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                                     >
                                         <div className="space-y-2">
                                             <div className="flex flex-wrap items-center gap-2">
-
-                                                <span className="text-xs text-slate-500">{problem.subject}</span>
+                                                <span className="text-xs text-slate-500">
+                                                    {problem.subject}
+                                                </span>
                                             </div>
-                                            <h2 className="text-sm font-semibold text-slate-900">{problem.title}</h2>
+                                            <h2 className="text-sm font-semibold text-slate-900">
+                                                {problem.title}
+                                            </h2>
                                             <p className="text-xs text-slate-500">
-                                                タグ: {problem.tags.length > 0 ? problem.tags.join(', ') : '-'}
+                                                タグ:{" "}
+                                                {problem.tags.length > 0
+                                                    ? problem.tags.join(", ")
+                                                    : "-"}
                                             </p>
                                         </div>
 
                                         <div className="space-y-2 text-sm">
                                             <div>
                                                 <div className="mt-1 text-slate-900">
-                                                    難易度 : <DifficultyValue value={problem.difficultySelf} />
+                                                    難易度 :{" "}
+                                                    <DifficultyValue
+                                                        value={
+                                                            problem.difficultySelf
+                                                        }
+                                                    />
                                                 </div>
                                             </div>
                                             <div>
                                                 <div className="mt-1 text-slate-900">
-                                                    形式 : {problem.targetLevel ?? '-'}
+                                                    形式 :{" "}
+                                                    {problem.targetLevel ?? "-"}
                                                 </div>
                                             </div>
                                         </div>
@@ -205,18 +242,26 @@ export default async function ProblemsPage({ searchParams }: ProblemsPageProps) 
                                             <summary className="cursor-pointer text-xs font-semibold text-slate-700 transition hover:text-slate-950">
                                                 問題文を表示
                                             </summary>
-                                            {problem.statement.trim().length > 0 ? (
-                                                <CopyableTextBlock text={problem.statement} label="問題文">
-                                                    <div className="mt-3 bg-white p-4 ring-1 ring-slate-200">
+                                            {problem.statement.trim().length >
+                                            0 ? (
+                                                <CopyableTextBlock
+                                                    text={problem.statement}
+                                                    label="問題文"
+                                                >
+                                                    <div className="mt-3 p-4 ring-1 ring-slate-200">
                                                         <MarkdownTex
-                                                            content={problem.statement}
+                                                            content={
+                                                                problem.statement
+                                                            }
                                                             className="text-sm text-slate-800"
                                                         />
                                                     </div>
                                                 </CopyableTextBlock>
                                             ) : (
-                                                <div className="mt-3 bg-white p-4 ring-1 ring-slate-200">
-                                                    <p className="text-sm text-slate-500">問題文は未登録です。</p>
+                                                <div className="mt-3 p-4 ring-1 ring-slate-200">
+                                                    <p className="text-sm text-slate-500">
+                                                        問題文は未登録です。
+                                                    </p>
                                                 </div>
                                             )}
                                         </details>

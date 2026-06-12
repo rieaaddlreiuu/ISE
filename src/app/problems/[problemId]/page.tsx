@@ -1,45 +1,52 @@
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
-import { ProblemAssetsPanel } from '@/components/problems/problemAssetsPanel';
-import { CopyableTextBlock } from '@/components/problems/copyableTextBlock';
-import { DeleteProblemButton } from '@/components/problems/deleteProblemButton';
-import { DifficultyValue } from '@/components/problems/difficultyValue';
-import { DownloadableProblemTextBlock } from '@/components/problems/downloadableProblemTextBlock';
-import { getProblemEditSections } from '@/components/problems/problemEditShell';
-import { PageHeader } from '@/components/layout/pageHeader';
-import { Card, CardHeader } from '@/components/ui/card';
-import { Tabs } from '@/components/ui/tabs';
-import { getProblemDetailView, getProblemRecord } from '@/lib/backend/problemViews';
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
+import { ProblemAssetsPanel } from "@/components/problems/problemAssetsPanel";
+import { CopyableTextBlock } from "@/components/problems/copyableTextBlock";
+import { DeleteProblemButton } from "@/components/problems/deleteProblemButton";
+import { DifficultyValue } from "@/components/problems/difficultyValue";
+import { DownloadableProblemTextBlock } from "@/components/problems/downloadableProblemTextBlock";
+import { getProblemEditSections } from "@/components/problems/problemEditShell";
+import { PageHeader } from "@/components/layout/pageHeader";
+import { Card, CardHeader } from "@/components/ui/card";
+import { Tabs } from "@/components/ui/tabs";
+import {
+    getProblemDetailView,
+    getProblemRecord,
+} from "@/lib/backend/problemViews";
 
 function statusClassName(status: string) {
-    if (status === 'published') {
-        return 'bg-emerald-50 text-emerald-700 ring-emerald-200';
+    if (status === "published") {
+        return "bg-emerald-50 text-emerald-700 ring-emerald-200";
     }
 
-    if (status === 'review') {
-        return 'bg-amber-50 text-amber-700 ring-amber-200';
+    if (status === "review") {
+        return "bg-amber-50 text-amber-700 ring-amber-200";
     }
 
-    return 'bg-slate-100 text-slate-700 ring-slate-200';
+    return "bg-slate-100 text-slate-700 ring-slate-200";
 }
 
 function InfoItem({ label, value }: { label: string; value: ReactNode }) {
     return (
         <div className="border border-slate-200 bg-slate-50 p-4">
-            <dt className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">{label}</dt>
+            <dt className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">
+                {label}
+            </dt>
             <dd className="mt-2 text-sm text-slate-900">{value}</dd>
         </div>
     );
 }
 
-export async function generateMetadata(props: PageProps<'/problems/[problemId]'>): Promise<Metadata> {
+export async function generateMetadata(
+    props: PageProps<"/problems/[problemId]">,
+): Promise<Metadata> {
     const { problemId } = await props.params;
     const problem = await getProblemRecord(problemId);
 
     if (!problem) {
-        return { title: '問題が見つかりません | ISE' };
+        return { title: "問題が見つかりません | ISE" };
     }
 
     return {
@@ -48,7 +55,9 @@ export async function generateMetadata(props: PageProps<'/problems/[problemId]'>
     };
 }
 
-export default async function ProblemDetailPage(props: PageProps<'/problems/[problemId]'>) {
+export default async function ProblemDetailPage(
+    props: PageProps<"/problems/[problemId]">,
+) {
     const { problemId } = await props.params;
     const problem = await getProblemDetailView(problemId);
 
@@ -56,12 +65,14 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
         notFound();
     }
 
-    const editSections = getProblemEditSections(problemId).filter((section) => section.id !== 'hub');
+    const editSections = getProblemEditSections(problemId).filter(
+        (section) => section.id !== "hub",
+    );
 
     const tabs = [
         {
-            id: 'overview',
-            label: '概要',
+            id: "overview",
+            label: "概要",
             content: (
                 <div className="space-y-6">
                     <Card>
@@ -77,7 +88,10 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
                             }
                         />
                         <dl className="grid gap-4 p-4 md:grid-cols-2 xl:grid-cols-4">
-                            <InfoItem label="問題コード" value={problem.serialCode} />
+                            <InfoItem
+                                label="問題コード"
+                                value={problem.serialCode}
+                            />
                             <InfoItem label="科目" value={problem.subject} />
                             <InfoItem
                                 label="難易度"
@@ -85,7 +99,10 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
                                     problem.difficultySelf === undefined ? (
                                         problem.level
                                     ) : (
-                                        <DifficultyValue value={problem.difficultySelf} fallback={problem.level} />
+                                        <DifficultyValue
+                                            value={problem.difficultySelf}
+                                            fallback={problem.level}
+                                        />
                                     )
                                 }
                             />
@@ -105,8 +122,12 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
                                     href={section.href}
                                     className="border border-slate-200 bg-slate-50 p-4 transition hover:border-slate-400 hover:bg-white"
                                 >
-                                    <div className="text-sm font-semibold text-slate-900">{section.label}</div>
-                                    <div className="mt-2 text-sm leading-6 text-slate-600">{section.description}</div>
+                                    <div className="text-sm font-semibold text-slate-900">
+                                        {section.label}
+                                    </div>
+                                    <div className="mt-2 text-sm leading-6 text-slate-600">
+                                        {section.description}
+                                    </div>
                                 </Link>
                             ))}
                         </div>
@@ -115,8 +136,8 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
             ),
         },
         {
-            id: 'statement',
-            label: '問題文',
+            id: "statement",
+            label: "問題文",
             content: (
                 <div className="space-y-5 px-1 py-2">
                     <DownloadableProblemTextBlock
@@ -140,37 +161,64 @@ export default async function ProblemDetailPage(props: PageProps<'/problems/[pro
             ),
         },
         {
-            id: 'answer',
-            label: '解答・解説',
+            id: "answer",
+            label: "解答・解説",
             content: (
                 <div className="space-y-8 px-1 py-2">
                     <section className="space-y-3">
-                        <h2 className="text-sm font-semibold text-slate-900">解答</h2>
-                        <CopyableTextBlock text={problem.answer} label="解答" enableNotationTransform />
+                        <h2 className="text-sm font-semibold text-slate-900">
+                            解答
+                        </h2>
+                        <CopyableTextBlock
+                            text={problem.answer}
+                            label="解答"
+                            enableNotationTransform
+                        />
                     </section>
                     <section className="space-y-3">
-                        <h2 className="text-sm font-semibold text-slate-900">解説</h2>
-                        <CopyableTextBlock text={problem.commentary} label="解説" enableNotationTransform />
+                        <h2 className="text-sm font-semibold text-slate-900">
+                            解説
+                        </h2>
+                        <CopyableTextBlock
+                            text={problem.commentary}
+                            label="解説"
+                            enableNotationTransform
+                        />
                     </section>
                 </div>
             ),
         },
         {
-            id: 'assets',
-            label: '画像',
-            content: <ProblemAssetsPanel problemId={problemId} assets={problem.assets} />,
+            id: "assets",
+            label: "画像",
+            content: (
+                <ProblemAssetsPanel
+                    problemId={problemId}
+                    assets={problem.assets}
+                />
+            ),
         },
         {
-            id: 'history',
-            label: '履歴',
+            id: "history",
+            label: "履歴",
             content: (
                 <Card>
-                    <CardHeader title="更新履歴" subtitle="DB 上の作成日時と最終更新日時です。" />
+                    <CardHeader
+                        title="更新履歴"
+                        subtitle="DB 上の作成日時と最終更新日時です。"
+                    />
                     <div className="space-y-3 p-4">
                         {problem.timeline.map((item) => (
-                            <div key={`${item.label}-${item.value}`} className="border border-slate-200 bg-slate-50 p-4">
-                                <div className="text-xs font-medium text-slate-500">{item.label}</div>
-                                <div className="mt-2 text-sm text-slate-900">{item.value}</div>
+                            <div
+                                key={`${item.label}-${item.value}`}
+                                className="border border-slate-200 bg-slate-50 p-4"
+                            >
+                                <div className="text-xs font-medium text-slate-500">
+                                    {item.label}
+                                </div>
+                                <div className="mt-2 text-sm text-slate-900">
+                                    {item.value}
+                                </div>
                             </div>
                         ))}
                     </div>

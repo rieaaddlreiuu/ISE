@@ -1,18 +1,20 @@
-'use client';
+"use client";
 
-import { useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from "react";
 
-type Theme = 'light' | 'dark';
+type Theme = "light" | "dark";
 
-const storageKey = 'ise-theme';
-const themeChangeEvent = 'ise-theme-change';
+const storageKey = "ise-theme";
+const themeChangeEvent = "ise-theme-change";
 
 function readTheme(): Theme {
-    if (typeof document === 'undefined') {
-        return 'dark';
+    if (typeof document === "undefined") {
+        return "dark";
     }
 
-    return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+    return document.documentElement.dataset.theme === "light"
+        ? "light"
+        : "dark";
 }
 
 function applyTheme(theme: Theme) {
@@ -23,39 +25,45 @@ function applyTheme(theme: Theme) {
 
 function subscribeThemeChange(onStoreChange: () => void) {
     window.addEventListener(themeChangeEvent, onStoreChange);
-    window.addEventListener('storage', onStoreChange);
+    window.addEventListener("storage", onStoreChange);
 
     return () => {
         window.removeEventListener(themeChangeEvent, onStoreChange);
-        window.removeEventListener('storage', onStoreChange);
+        window.removeEventListener("storage", onStoreChange);
     };
 }
 
 export function ThemeToggle() {
-    const theme = useSyncExternalStore(subscribeThemeChange, readTheme, () => 'dark');
-    const isDark = theme === 'dark';
+    const theme = useSyncExternalStore(
+        subscribeThemeChange,
+        readTheme,
+        () => "dark",
+    );
+    const isDark = theme === "dark";
 
     function toggleTheme() {
-        const nextTheme = isDark ? 'light' : 'dark';
+        const nextTheme = isDark ? "light" : "dark";
         applyTheme(nextTheme);
     }
 
     return (
         <button
             type="button"
-            aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+            aria-label={
+                isDark ? "Switch to light theme" : "Switch to dark theme"
+            }
             aria-pressed={isDark}
             onClick={toggleTheme}
             className="inline-flex h-8 w-14 items-center rounded-full border border-slate-300 bg-slate-100 p-1 transition hover:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
         >
             <span
                 className={[
-                    'theme-toggle-thumb flex size-6 items-center justify-center rounded-full bg-white text-[13px] font-semibold leading-none text-slate-900 shadow-sm transition-transform',
-                    isDark ? 'translate-x-6' : 'translate-x-0',
-                ].join(' ')}
+                    "theme-toggle-thumb flex size-6 items-center justify-center rounded-full bg-white text-[13px] font-semibold leading-none text-slate-900 shadow-sm transition-transform",
+                    isDark ? "translate-x-6" : "translate-x-0",
+                ].join(" ")}
                 aria-hidden="true"
             >
-                {isDark ? 'D' : 'L'}
+                {isDark ? "D" : "L"}
             </span>
         </button>
     );

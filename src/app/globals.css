@@ -39,8 +39,16 @@ html {
 
 html[data-theme="dark"] {
   background:
-    radial-gradient(circle at top left, rgba(56, 189, 248, 0.14), transparent 32%),
-    radial-gradient(circle at 80% 10%, rgba(16, 185, 129, 0.08), transparent 28%),
+    radial-gradient(
+      circle at top left,
+      rgba(56, 189, 248, 0.14),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 80% 10%,
+      rgba(16, 185, 129, 0.08),
+      transparent 28%
+    ),
     linear-gradient(180deg, #060a11 0%, var(--background) 100%);
 }
 
@@ -87,7 +95,7 @@ html[data-theme="dark"] .problems-route textarea::selection {
 html[data-theme="dark"] input,
 html[data-theme="dark"] select,
 html[data-theme="dark"] textarea {
-  background-color: var(--surface);
+  background-color: transparent;
   color: var(--foreground);
   caret-color: var(--accent);
 }
@@ -98,46 +106,43 @@ html[data-theme="dark"] textarea::placeholder {
 }
 
 html[data-theme="dark"] select option {
-  background-color: var(--surface);
+  background-color: transparent;
   color: var(--foreground);
 }
 
 html[data-theme="dark"] .bg-white,
 html[data-theme="dark"] .hover\:bg-white:hover,
-html[data-theme="dark"] .bg-white\/90 {
-  background-color: var(--surface);
-}
-
-html[data-theme="dark"] .bg-slate-50,
-html[data-theme="dark"] .bg-slate-100,
 html[data-theme="dark"] .hover\:bg-slate-50:hover,
 html[data-theme="dark"] .hover\:bg-slate-100:hover,
-html[data-theme="dark"] .bg-\[\#f5f2ea\] {
-  background-color: var(--surface-muted);
-}
-
-html[data-theme="dark"] .bg-blue-50 {
-  background-color: rgba(14, 165, 233, 0.12);
-}
-
-html[data-theme="dark"] .bg-blue-600 {
-  background-color: var(--accent-strong);
-}
-
-html[data-theme="dark"] .hover\:bg-blue-700:hover {
-  background-color: #0284c7;
-}
-
+html[data-theme="dark"] .hover\:bg-slate-700:hover,
+html[data-theme="dark"] .hover\:bg-slate-800:hover,
+html[data-theme="dark"] .hover\:bg-blue-100:hover,
+html[data-theme="dark"] .hover\:bg-blue-700:hover,
+html[data-theme="dark"] .hover\:bg-rose-100:hover,
+html[data-theme="dark"] .bg-white\/90,
+html[data-theme="dark"] .bg-white\/80,
+html[data-theme="dark"] .bg-slate-50,
+html[data-theme="dark"] .bg-slate-100,
+html[data-theme="dark"] .bg-slate-200,
+html[data-theme="dark"] .bg-slate-700,
 html[data-theme="dark"] .bg-slate-900,
 html[data-theme="dark"] .bg-slate-950,
-html[data-theme="dark"] .hover\:bg-slate-800:hover {
-  background-color: #e2e8f0;
-  color: #07111f;
-}
-
-html[data-theme="dark"] .disabled\:bg-slate-500:disabled {
-  background-color: #475569;
-  color: #cbd5e1;
+html[data-theme="dark"] .bg-blue-50,
+html[data-theme="dark"] .bg-blue-600,
+html[data-theme="dark"] .bg-sky-50,
+html[data-theme="dark"] .bg-sky-500,
+html[data-theme="dark"] .bg-emerald-50,
+html[data-theme="dark"] .bg-emerald-500,
+html[data-theme="dark"] .bg-amber-50,
+html[data-theme="dark"] .bg-amber-500,
+html[data-theme="dark"] .bg-red-50,
+html[data-theme="dark"] .bg-rose-50,
+html[data-theme="dark"] .bg-rose-500,
+html[data-theme="dark"] .bg-gradient-to-br,
+html[data-theme="dark"] .disabled\:bg-slate-500:disabled,
+html[data-theme="dark"] .bg-\[\#f5f2ea\] {
+  background-color: transparent;
+  background-image: none;
 }
 
 html[data-theme="dark"] .text-slate-950,
@@ -160,6 +165,39 @@ html[data-theme="dark"] .text-slate-400 {
 
 html[data-theme="dark"] .text-blue-600 {
   color: #7dd3fc;
+}
+
+html[data-theme="dark"]
+  :where(button, a).text-white:is(.bg-slate-900, .bg-slate-950, .bg-blue-600),
+html[data-theme="dark"]
+  :where(button, a).hover\:bg-slate-800:hover,
+html[data-theme="dark"]
+  :where(button, a).hover\:bg-blue-700:hover {
+  color: #7dd3fc;
+}
+
+html[data-theme="dark"]
+  :where(button, a):is(
+    .bg-white,
+    .bg-slate-50,
+    .bg-slate-100,
+    .bg-slate-900,
+    .bg-slate-950,
+    .bg-blue-600
+  ) {
+  border-color: transparent;
+  color: #7dd3fc;
+}
+
+html[data-theme="dark"]
+  :where(button, a):is(.bg-red-50, .bg-rose-50, .text-red-700, .text-rose-700) {
+  border-color: transparent;
+  color: #fda4af;
+}
+
+html[data-theme="dark"]
+  :where(button, a):disabled:is(.bg-slate-900, .bg-slate-950, .bg-blue-600) {
+  color: var(--muted);
 }
 
 html[data-theme="dark"] .border-slate-100,
@@ -193,10 +231,6 @@ html[data-theme="dark"] .ring-1 {
   --tw-ring-color: var(--border);
 }
 
-html[data-theme="dark"] .bg-emerald-50 {
-  background-color: rgba(16, 185, 129, 0.14);
-}
-
 html[data-theme="dark"] .text-emerald-700,
 html[data-theme="dark"] .text-emerald-600 {
   color: #6ee7b7;
@@ -208,10 +242,6 @@ html[data-theme="dark"] .border-emerald-200 {
   border-color: rgba(110, 231, 183, 0.32);
 }
 
-html[data-theme="dark"] .bg-amber-50 {
-  background-color: rgba(245, 158, 11, 0.16);
-}
-
 html[data-theme="dark"] .text-amber-700,
 html[data-theme="dark"] .text-amber-600 {
   color: #fbbf24;
@@ -221,21 +251,12 @@ html[data-theme="dark"] .ring-amber-200 {
   --tw-ring-color: rgba(251, 191, 36, 0.32);
 }
 
-html[data-theme="dark"] .bg-sky-50 {
-  background-color: rgba(14, 165, 233, 0.14);
-}
-
 html[data-theme="dark"] .text-sky-700 {
   color: #7dd3fc;
 }
 
 html[data-theme="dark"] .ring-sky-200 {
   --tw-ring-color: rgba(125, 211, 252, 0.32);
-}
-
-html[data-theme="dark"] .bg-red-50,
-html[data-theme="dark"] .bg-rose-50 {
-  background-color: rgba(244, 63, 94, 0.14);
 }
 
 html[data-theme="dark"] .text-red-700,
@@ -256,14 +277,14 @@ html[data-theme="dark"] .hover\:border-rose-300:hover {
   border-color: rgba(253, 164, 175, 0.48);
 }
 
-html[data-theme="dark"] .hover\:bg-rose-100:hover {
-  background-color: rgba(244, 63, 94, 0.22);
-}
-
-.theme-toggle-thumb,
-html[data-theme="dark"] .theme-toggle-thumb {
+.theme-toggle-thumb {
   background-color: #ffffff;
   color: #0f172a;
+}
+
+html[data-theme="dark"] .theme-toggle-thumb {
+  background-color: transparent;
+  color: var(--foreground);
 }
 
 html[data-theme="dark"] .tab-trigger-active {
@@ -418,7 +439,7 @@ html[data-theme="dark"] .markdown-rendered blockquote {
 
 html[data-theme="dark"] .markdown-rendered details {
   border-color: var(--border);
-  background: var(--surface-muted);
+  background: transparent;
 }
 
 html[data-theme="dark"] .markdown-rendered summary {
@@ -427,7 +448,7 @@ html[data-theme="dark"] .markdown-rendered summary {
 
 html[data-theme="dark"] .markdown-preview details {
   border-color: var(--border);
-  background: var(--surface-muted);
+  background: transparent;
 }
 
 html[data-theme="dark"] .markdown-preview summary {
@@ -435,11 +456,11 @@ html[data-theme="dark"] .markdown-preview summary {
 }
 
 html[data-theme="dark"] .markdown-preview code {
-  background: var(--surface-subtle);
+  background: transparent;
 }
 
 html[data-theme="dark"] .markdown-preview pre {
-  background: #030712;
+  background: transparent;
 }
 
 html[data-theme="dark"] .markdown-preview th,
@@ -452,11 +473,15 @@ html[data-theme="dark"] .markdown-preview td {
   color: #334155 !important;
 }
 
-.problem-statement-export.problem-statement-capturing :where(p, li, td, dd, span):not(.katex *):not(.katex) {
+.problem-statement-export.problem-statement-capturing
+  :where(p, li, td, dd, span):not(.katex *):not(.katex) {
   color: #334155 !important;
 }
 
-.problem-statement-export.problem-statement-capturing :where(h1, h2, h3, h4, summary, strong, blockquote):not(.katex *):not(.katex) {
+.problem-statement-export.problem-statement-capturing
+  :where(h1, h2, h3, h4, summary, strong, blockquote):not(.katex *):not(
+    .katex
+  ) {
   color: #0f172a !important;
 }
 
@@ -472,7 +497,8 @@ html[data-theme="dark"] .markdown-preview td {
   border-color: #cbd5e1 !important;
 }
 
-.problem-statement-export.problem-statement-capturing :where(code):not(pre code) {
+.problem-statement-export.problem-statement-capturing
+  :where(code):not(pre code) {
   background: #f1f5f9 !important;
   color: #0f172a !important;
 }
@@ -502,37 +528,162 @@ html[data-theme="dark"] .problem-statement-export.problem-statement-capturing {
   --tw-ring-color: #2b3a4f !important;
 }
 
-html[data-theme="dark"] .problem-statement-export.problem-statement-capturing :where(p, li, td, dd, span):not(.katex *):not(.katex) {
+html[data-theme="dark"]
+  .problem-statement-export.problem-statement-capturing
+  :where(p, li, td, dd, span):not(.katex *):not(.katex) {
   color: #cbd5e1 !important;
 }
 
-html[data-theme="dark"] .problem-statement-export.problem-statement-capturing :where(h1, h2, h3, h4, summary, strong, blockquote):not(.katex *):not(.katex) {
+html[data-theme="dark"]
+  .problem-statement-export.problem-statement-capturing
+  :where(h1, h2, h3, h4, summary, strong, blockquote):not(.katex *):not(
+    .katex
+  ) {
   color: #f8fafc !important;
 }
 
-html[data-theme="dark"] .problem-statement-export.problem-statement-capturing blockquote {
+html[data-theme="dark"]
+  .problem-statement-export.problem-statement-capturing
+  blockquote {
   border-left-color: #3f5068 !important;
 }
 
-html[data-theme="dark"] .problem-statement-export.problem-statement-capturing :where(details, th) {
+html[data-theme="dark"]
+  .problem-statement-export.problem-statement-capturing
+  :where(details, th) {
   background: #151f2d !important;
 }
 
-html[data-theme="dark"] .problem-statement-export.problem-statement-capturing :where(details, th, td) {
+html[data-theme="dark"]
+  .problem-statement-export.problem-statement-capturing
+  :where(details, th, td) {
   border-color: #2b3a4f !important;
 }
 
-html[data-theme="dark"] .problem-statement-export.problem-statement-capturing :where(code):not(pre code) {
-  background: #1b2737 !important;
+html[data-theme="dark"]
+  .problem-statement-export.problem-statement-capturing
+  :where(code):not(pre code) {
+  background: transparent !important;
   color: #f8fafc !important;
 }
 
-html[data-theme="dark"] .problem-statement-export.problem-statement-capturing pre {
-  background: #030712 !important;
+html[data-theme="dark"]
+  .problem-statement-export.problem-statement-capturing
+  pre {
+  background: transparent !important;
   color: #e2e8f0 !important;
 }
 
-html[data-theme="dark"] .problem-statement-export.problem-statement-capturing .katex,
-html[data-theme="dark"] .problem-statement-export.problem-statement-capturing .katex * {
+html[data-theme="dark"]
+  .problem-statement-export.problem-statement-capturing
+  .katex,
+html[data-theme="dark"]
+  .problem-statement-export.problem-statement-capturing
+  .katex
+  * {
   color: #f8fafc !important;
+}
+
+:where(button, a.inline-flex) {
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  --tw-ring-color: transparent !important;
+}
+
+:where(button, a.inline-flex):not(
+    .text-red-700,
+    .text-red-600,
+    .text-rose-700,
+    .text-rose-600,
+    .border-red-200,
+    .border-rose-200
+  ) {
+  color: #2563eb !important;
+}
+
+:where(button, a.inline-flex):is(
+    .text-red-700,
+    .text-red-600,
+    .text-rose-700,
+    .text-rose-600,
+    .border-red-200,
+    .border-rose-200
+  ) {
+  color: #dc2626 !important;
+}
+
+html[data-theme="dark"]
+  :where(button, a.inline-flex):not(
+    .text-red-700,
+    .text-red-600,
+    .text-rose-700,
+    .text-rose-600,
+    .border-red-200,
+    .border-rose-200
+  ) {
+  color: #7dd3fc !important;
+}
+
+html[data-theme="dark"]
+  :where(button, a.inline-flex):is(
+    .text-red-700,
+    .text-red-600,
+    .text-rose-700,
+    .text-rose-600,
+    .border-red-200,
+    .border-rose-200
+  ) {
+  color: #fda4af !important;
+}
+
+header a.inline-flex {
+  color: #475569 !important;
+}
+
+header a.inline-flex:hover {
+  color: #020617 !important;
+}
+
+html[data-theme="dark"] header a.inline-flex {
+  color: var(--muted-strong) !important;
+}
+
+html[data-theme="dark"] header a.inline-flex:hover {
+  color: var(--foreground) !important;
+}
+
+.tab-trigger {
+  color: #64748b !important;
+  border-color: transparent !important;
+}
+
+.tab-trigger:hover {
+  color: #0f172a !important;
+}
+
+.tab-trigger-active {
+  color: #0f172a !important;
+  border-bottom-color: #0f172a !important;
+}
+
+.tab-trigger-active-description {
+  color: #475569 !important;
+}
+
+html[data-theme="dark"] .tab-trigger {
+  color: var(--muted) !important;
+}
+
+html[data-theme="dark"] .tab-trigger:hover {
+  color: var(--foreground) !important;
+}
+
+html[data-theme="dark"] .tab-trigger-active {
+  color: var(--foreground) !important;
+  border-bottom-color: var(--accent) !important;
+}
+
+html[data-theme="dark"] .tab-trigger-active-description {
+  color: #7dd3fc !important;
 }

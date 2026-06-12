@@ -3,7 +3,10 @@ type DifficultyValueProps = {
     fallback?: string;
 };
 
-export function DifficultyValue({ value, fallback = '-' }: DifficultyValueProps) {
+export function DifficultyValue({
+    value,
+    fallback = "-",
+}: DifficultyValueProps) {
     if (value === null) {
         return <>{fallback}</>;
     }

@@ -1,8 +1,8 @@
-import Link from 'next/link';
-import { saveProblemMetadataAction } from '@/app/problems/actions';
-import { AiSingleRunPanel } from '@/components/problems/aiSingleRunPanel';
-import { DeleteProblemButton } from '@/components/problems/deleteProblemButton';
-import { ProblemTagChipSelector } from '@/components/problems/problemTagChipSelector';
+import Link from "next/link";
+import { saveProblemMetadataAction } from "@/app/problems/actions";
+import { AiSingleRunPanel } from "@/components/problems/aiSingleRunPanel";
+import { DeleteProblemButton } from "@/components/problems/deleteProblemButton";
+import { ProblemTagChipSelector } from "@/components/problems/problemTagChipSelector";
 import {
     ProblemEditActions,
     ProblemEditSection,
@@ -10,11 +10,11 @@ import {
     labelClassName,
     lineFieldClassName,
     lineSelectClassName,
-} from '@/components/problems/problemEditShell';
-import { Card, CardHeader } from '@/components/ui/card';
-import type { TagOption } from '@/lib/backend/tags';
-import type { ProblemEditScreenData } from '@/mocks/problemEdit';
-import type { ProblemDetail } from '@/mocks/problemDetails';
+} from "@/components/problems/problemEditShell";
+import { Card, CardHeader } from "@/components/ui/card";
+import type { TagOption } from "@/lib/backend/tags";
+import type { ProblemEditScreenData } from "@/mocks/problemEdit";
+import type { ProblemDetail } from "@/mocks/problemDetails";
 
 type ProblemMetadataEditScreenProps = {
     problemId: string;
@@ -74,8 +74,14 @@ export function ProblemMetadataEditScreen({
                             </label>
 
                             <label className="block">
-                                <span className={labelClassName()}>ステータス</span>
-                                <select name="status" defaultValue={form.status} className={lineSelectClassName()}>
+                                <span className={labelClassName()}>
+                                    ステータス
+                                </span>
+                                <select
+                                    name="status"
+                                    defaultValue={form.status}
+                                    className={lineSelectClassName()}
+                                >
                                     <option value="draft">下書き</option>
                                     <option value="review">レビュー中</option>
                                     <option value="ready">公開準備</option>
@@ -97,7 +103,11 @@ export function ProblemMetadataEditScreen({
                         <div className="grid gap-6 md:grid-cols-3">
                             <label className="block">
                                 <span className={labelClassName()}>教科</span>
-                                <select name="subject" defaultValue={form.subject} className={lineSelectClassName()}>
+                                <select
+                                    name="subject"
+                                    defaultValue={form.subject}
+                                    className={lineSelectClassName()}
+                                >
                                     <option value="math">数学</option>
                                     <option value="physics">物理</option>
                                     <option value="chemistry">化学</option>
@@ -115,7 +125,7 @@ export function ProblemMetadataEditScreen({
                                     min="1"
                                     max="11"
                                     step="1"
-                                    defaultValue={form.difficulty || '5'}
+                                    defaultValue={form.difficulty || "5"}
                                     className={lineFieldClassName()}
                                     placeholder="1〜11"
                                 />
@@ -123,7 +133,11 @@ export function ProblemMetadataEditScreen({
 
                             <label className="block">
                                 <span className={labelClassName()}>形式</span>
-                                <select name="format" defaultValue={form.format} className={lineSelectClassName()}>
+                                <select
+                                    name="format"
+                                    defaultValue={form.format}
+                                    className={lineSelectClassName()}
+                                >
                                     <option value="descriptive">記述</option>
                                     <option value="multiple">選択式</option>
                                     <option value="short">短答</option>
@@ -161,9 +175,18 @@ export function ProblemMetadataEditScreen({
                     resultTitle="評価理由"
                     resultBody={problem.ai.difficulty.rationale}
                     details={[
-                        { label: '自己評価', value: problem.ai.difficulty.current },
-                        { label: 'AI評価', value: problem.ai.difficulty.suggested },
-                        { label: '信頼度', value: problem.ai.difficulty.confidence },
+                        {
+                            label: "自己評価",
+                            value: problem.ai.difficulty.current,
+                        },
+                        {
+                            label: "AI評価",
+                            value: problem.ai.difficulty.suggested,
+                        },
+                        {
+                            label: "信頼度",
+                            value: problem.ai.difficulty.confidence,
+                        },
                     ]}
                     note="評価結果は保存前提ではなく、その場で確認するための表示です。"
                 />

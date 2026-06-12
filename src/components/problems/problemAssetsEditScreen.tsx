@@ -1,16 +1,19 @@
-import Link from 'next/link';
-import { DeleteProblemButton } from '@/components/problems/deleteProblemButton';
-import { ProblemAssetsPanel } from '@/components/problems/problemAssetsPanel';
-import { ProblemEditShell } from '@/components/problems/problemEditShell';
-import { Card, CardHeader } from '@/components/ui/card';
-import type { ProblemDetail } from '@/mocks/problemDetails';
+import Link from "next/link";
+import { DeleteProblemButton } from "@/components/problems/deleteProblemButton";
+import { ProblemAssetsPanel } from "@/components/problems/problemAssetsPanel";
+import { ProblemEditShell } from "@/components/problems/problemEditShell";
+import { Card, CardHeader } from "@/components/ui/card";
+import type { ProblemDetail } from "@/mocks/problemDetails";
 
 type ProblemAssetsEditScreenProps = {
     problemId: string;
     problem: ProblemDetail;
 };
 
-export function ProblemAssetsEditScreen({ problemId, problem }: ProblemAssetsEditScreenProps) {
+export function ProblemAssetsEditScreen({
+    problemId,
+    problem,
+}: ProblemAssetsEditScreenProps) {
     return (
         <ProblemEditShell
             problemId={problemId}
@@ -36,7 +39,10 @@ export function ProblemAssetsEditScreen({ problemId, problem }: ProblemAssetsEdi
                     subtitle="ライブラリ確認とアップロードをこの画面に分離しました。"
                 />
                 <div className="p-4">
-                    <ProblemAssetsPanel problemId={problemId} assets={problem.assets} />
+                    <ProblemAssetsPanel
+                        problemId={problemId}
+                        assets={problem.assets}
+                    />
                 </div>
             </Card>
         </ProblemEditShell>

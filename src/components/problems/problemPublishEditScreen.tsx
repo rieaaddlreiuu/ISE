@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import { saveProblemPublishAction } from '@/app/problems/actions';
-import { DeleteProblemButton } from '@/components/problems/deleteProblemButton';
+import Link from "next/link";
+import { saveProblemPublishAction } from "@/app/problems/actions";
+import { DeleteProblemButton } from "@/components/problems/deleteProblemButton";
 import {
     ProblemEditActions,
     ProblemEditSection,
@@ -9,16 +9,19 @@ import {
     labelClassName,
     lineFieldClassName,
     lineTextareaClassName,
-} from '@/components/problems/problemEditShell';
-import { Card, CardHeader } from '@/components/ui/card';
-import type { ProblemEditScreenData } from '@/mocks/problemEdit';
+} from "@/components/problems/problemEditShell";
+import { Card, CardHeader } from "@/components/ui/card";
+import type { ProblemEditScreenData } from "@/mocks/problemEdit";
 
 type ProblemPublishEditScreenProps = {
     problemId: string;
     screen: ProblemEditScreenData;
 };
 
-export function ProblemPublishEditScreen({ problemId, screen }: ProblemPublishEditScreenProps) {
+export function ProblemPublishEditScreen({
+    problemId,
+    screen,
+}: ProblemPublishEditScreenProps) {
     const { form } = screen;
     const saveAction = saveProblemPublishAction.bind(null, problemId);
 
@@ -77,10 +80,10 @@ export function ProblemPublishEditScreen({ problemId, screen }: ProblemPublishEd
                             </div>
                             <div className="grid gap-4 sm:grid-cols-2">
                                 {[
-                                    { value: 'booklet', label: '冊子' },
-                                    { value: 'web', label: 'Web' },
-                                    { value: 'print', label: '印刷教材' },
-                                    { value: 'teacher', label: '講師用資料' },
+                                    { value: "booklet", label: "冊子" },
+                                    { value: "web", label: "Web" },
+                                    { value: "print", label: "印刷教材" },
+                                    { value: "teacher", label: "講師用資料" },
                                 ].map((target) => (
                                     <label
                                         key={target.value}
@@ -90,7 +93,9 @@ export function ProblemPublishEditScreen({ problemId, screen }: ProblemPublishEd
                                             type="checkbox"
                                             name="destinations"
                                             value={target.value}
-                                            defaultChecked={form.destinations.includes(target.value)}
+                                            defaultChecked={form.destinations.includes(
+                                                target.value,
+                                            )}
                                             className="mt-1 h-4 w-4 border-slate-300 text-slate-900"
                                         />
                                         <span>{target.label}</span>

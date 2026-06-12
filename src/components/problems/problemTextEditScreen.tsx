@@ -1,17 +1,17 @@
-import Link from 'next/link';
-import { saveProblemTextAction } from '@/app/problems/actions';
-import { AiSingleRunPanel } from '@/components/problems/aiSingleRunPanel';
-import { DeleteProblemButton } from '@/components/problems/deleteProblemButton';
-import { MarkdownTexTextarea } from '@/components/problems/markdownTexTextarea';
+import Link from "next/link";
+import { saveProblemTextAction } from "@/app/problems/actions";
+import { AiSingleRunPanel } from "@/components/problems/aiSingleRunPanel";
+import { DeleteProblemButton } from "@/components/problems/deleteProblemButton";
+import { MarkdownTexTextarea } from "@/components/problems/markdownTexTextarea";
 import {
     ProblemEditActions,
     ProblemEditSection,
     ProblemEditShell,
     lineTextareaClassName,
-} from '@/components/problems/problemEditShell';
-import { Card, CardHeader } from '@/components/ui/card';
-import type { ProblemEditScreenData } from '@/mocks/problemEdit';
-import type { ProblemDetail } from '@/mocks/problemDetails';
+} from "@/components/problems/problemEditShell";
+import { Card, CardHeader } from "@/components/ui/card";
+import type { ProblemEditScreenData } from "@/mocks/problemEdit";
+import type { ProblemDetail } from "@/mocks/problemDetails";
 
 type ProblemTextEditScreenProps = {
     problemId: string;
@@ -19,7 +19,11 @@ type ProblemTextEditScreenProps = {
     problem: ProblemDetail;
 };
 
-export function ProblemTextEditScreen({ problemId, screen, problem }: ProblemTextEditScreenProps) {
+export function ProblemTextEditScreen({
+    problemId,
+    screen,
+    problem,
+}: ProblemTextEditScreenProps) {
     const { form } = screen;
     const saveAction = saveProblemTextAction.bind(null, problemId);
 

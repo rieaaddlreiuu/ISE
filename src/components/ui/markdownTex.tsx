@@ -48,7 +48,10 @@ type MarkdownTexContentProps = {
     inlineParagraphs?: boolean;
 };
 
-export function MarkdownTexContent({ content, inlineParagraphs = false }: MarkdownTexContentProps) {
+export function MarkdownTexContent({
+    content,
+    inlineParagraphs = false,
+}: MarkdownTexContentProps) {
     const normalizedContent = normalizeDisplayMathBlocks(content);
     const segments = parseDetailsBlocks(normalizedContent);
 
@@ -59,7 +62,10 @@ export function MarkdownTexContent({ content, inlineParagraphs = false }: Markdo
                     return (
                         <details key={index} open={segment.open}>
                             <summary>
-                                <MarkdownTexContent content={segment.summary} inlineParagraphs />
+                                <MarkdownTexContent
+                                    content={segment.summary}
+                                    inlineParagraphs
+                                />
                             </summary>
                             <MarkdownTexContent content={segment.body} />
                         </details>
@@ -71,7 +77,11 @@ export function MarkdownTexContent({ content, inlineParagraphs = false }: Markdo
                         key={index}
                         remarkPlugins={markdownRemarkPlugins}
                         rehypePlugins={markdownRehypePlugins}
-                        components={inlineParagraphs ? { p: ({ children }) => <>{children}</> } : undefined}
+                        components={
+                            inlineParagraphs
+                                ? { p: ({ children }) => <>{children}</> }
+                                : undefined
+                        }
                     >
                         {segment.content}
                     </ReactMarkdown>

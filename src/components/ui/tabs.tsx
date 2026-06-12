@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from "react";
 
 export type TabDefinition = {
     id: string;
@@ -16,8 +16,10 @@ type TabsProperties = {
 };
 
 export function Tabs({ tabs, initialTabId, framed = true }: TabsProperties) {
-    const fallbackTabId = tabs[0]?.id ?? '';
-    const [activeTabId, setActiveTabId] = useState(initialTabId ?? fallbackTabId);
+    const fallbackTabId = tabs[0]?.id ?? "";
+    const [activeTabId, setActiveTabId] = useState(
+        initialTabId ?? fallbackTabId,
+    );
 
     if (tabs.length === 0) {
         return null;
@@ -28,9 +30,11 @@ export function Tabs({ tabs, initialTabId, framed = true }: TabsProperties) {
     return (
         <div
             className={[
-                'overflow-hidden',
-                framed ? 'rounded-none bg-white shadow-sm ring-1 ring-slate-200' : '',
-            ].join(' ')}
+                "overflow-hidden",
+                framed
+                    ? "rounded-none bg-white shadow-sm ring-1 ring-slate-200"
+                    : "",
+            ].join(" ")}
         >
             <div className="flex flex-wrap items-end justify-start gap-1 border-b border-slate-200 px-4 pt-3">
                 {tabs.map((tab) => {
@@ -42,20 +46,24 @@ export function Tabs({ tabs, initialTabId, framed = true }: TabsProperties) {
                             type="button"
                             onClick={() => setActiveTabId(tab.id)}
                             className={[
-                                'rounded-none px-3 py-2 text-left transition-colors',
+                                "tab-trigger rounded-none px-3 py-2 text-left transition-colors",
                                 isActive
-                                    ? 'tab-trigger-active border-b-2 border-slate-900 text-slate-900'
-                                    : 'border-b-2 border-transparent text-slate-500 hover:text-slate-900',
-                            ].join(' ')}
+                                    ? "tab-trigger-active border-b-2 border-slate-900 text-slate-900"
+                                    : "border-b-2 border-transparent text-slate-500 hover:text-slate-900",
+                            ].join(" ")}
                             aria-pressed={isActive}
                         >
-                            <div className="text-sm font-semibold">{tab.label}</div>
+                            <div className="text-sm font-semibold">
+                                {tab.label}
+                            </div>
                             {tab.description ? (
                                 <div
                                     className={[
-                                        'mt-1 text-xs',
-                                        isActive ? 'tab-trigger-active-description text-slate-600' : 'text-slate-500',
-                                    ].join(' ')}
+                                        "mt-1 text-xs",
+                                        isActive
+                                            ? "tab-trigger-active-description text-slate-600"
+                                            : "text-slate-500",
+                                    ].join(" ")}
                                 >
                                     {tab.description}
                                 </div>

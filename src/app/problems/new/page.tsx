@@ -1,35 +1,35 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import type { ReactNode } from 'react';
-import { createProblemAction } from '@/app/problems/actions';
-import { PageHeader } from '@/components/layout/pageHeader';
-import { MarkdownTexTextarea } from '@/components/problems/markdownTexTextarea';
-import { ProblemTagChipSelector } from '@/components/problems/problemTagChipSelector';
-import { Card, CardHeader } from '@/components/ui/card';
-import { listTagOptions } from '@/lib/backend/tags';
+import type { Metadata } from "next";
+import Link from "next/link";
+import type { ReactNode } from "react";
+import { createProblemAction } from "@/app/problems/actions";
+import { PageHeader } from "@/components/layout/pageHeader";
+import { MarkdownTexTextarea } from "@/components/problems/markdownTexTextarea";
+import { ProblemTagChipSelector } from "@/components/problems/problemTagChipSelector";
+import { Card, CardHeader } from "@/components/ui/card";
+import { listTagOptions } from "@/lib/backend/tags";
 
 export const metadata: Metadata = {
-    title: '問題新規登録 | ISE',
-    description: 'データベースに問題を登録',
+    title: "問題新規登録 | ISE",
+    description: "データベースに問題を登録",
 };
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 function sectionLabelClassName() {
-    return 'text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500';
+    return "text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500";
 }
 
 function labelClassName() {
-    return 'text-sm font-medium text-slate-700';
+    return "text-sm font-medium text-slate-700";
 }
 
 function lineFieldClassName() {
     return [
-        'mt-3 w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-1 text-sm text-slate-900 outline-none transition',
-        'placeholder:text-slate-400',
-        'focus:border-slate-900',
-        'focus:ring-0',
-    ].join(' ');
+        "mt-3 w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-1 text-sm text-slate-900 outline-none transition",
+        "placeholder:text-slate-400",
+        "focus:border-slate-900",
+        "focus:ring-0",
+    ].join(" ");
 }
 
 function lineTextareaClassName() {
@@ -38,10 +38,10 @@ function lineTextareaClassName() {
 
 function lineSelectClassName() {
     return [
-        'mt-3 w-full appearance-none border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-1 text-sm text-slate-900 outline-none transition',
-        'focus:border-slate-900',
-        'focus:ring-0',
-    ].join(' ');
+        "mt-3 w-full appearance-none border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-1 text-sm text-slate-900 outline-none transition",
+        "focus:border-slate-900",
+        "focus:ring-0",
+    ].join(" ");
 }
 
 function Section({
@@ -60,8 +60,12 @@ function Section({
             <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
                 <div className="space-y-2">
                     <p className={sectionLabelClassName()}>{label}</p>
-                    <h2 className="text-lg font-semibold text-slate-950">{title}</h2>
-                    <p className="text-sm leading-6 text-slate-500">{description}</p>
+                    <h2 className="text-lg font-semibold text-slate-950">
+                        {title}
+                    </h2>
+                    <p className="text-sm leading-6 text-slate-500">
+                        {description}
+                    </p>
                 </div>
                 <div className="space-y-6">{children}</div>
             </div>
@@ -99,7 +103,10 @@ export default async function ProblemRegistrationPage() {
                             subtitle="送信すると必須項目がそのままデータベースに保存されます。"
                         />
 
-                        <form action={createProblemAction} className="space-y-8 p-5 sm:p-8">
+                        <form
+                            action={createProblemAction}
+                            className="space-y-8 p-5 sm:p-8"
+                        >
                             <Section
                                 label="Basics"
                                 title="基本情報"
@@ -107,18 +114,34 @@ export default async function ProblemRegistrationPage() {
                             >
                                 <div className="grid gap-6 md:grid-cols-2">
                                     <label className="block">
-                                        <span className={labelClassName()}>ステータス</span>
-                                        <select name="stage" defaultValue="draft" className={lineSelectClassName()}>
-                                            <option value="draft">下書き</option>
-                                            <option value="review">レビュー中</option>
-                                            <option value="ready">公開準備完了</option>
-                                            <option value="published">公開中</option>
+                                        <span className={labelClassName()}>
+                                            ステータス
+                                        </span>
+                                        <select
+                                            name="stage"
+                                            defaultValue="draft"
+                                            className={lineSelectClassName()}
+                                        >
+                                            <option value="draft">
+                                                下書き
+                                            </option>
+                                            <option value="review">
+                                                レビュー中
+                                            </option>
+                                            <option value="ready">
+                                                公開準備完了
+                                            </option>
+                                            <option value="published">
+                                                公開中
+                                            </option>
                                         </select>
                                     </label>
                                 </div>
 
                                 <label className="block">
-                                    <span className={labelClassName()}>タイトル</span>
+                                    <span className={labelClassName()}>
+                                        タイトル
+                                    </span>
                                     <input
                                         name="title"
                                         className={lineFieldClassName()}
@@ -128,19 +151,37 @@ export default async function ProblemRegistrationPage() {
 
                                 <div className="grid gap-6 md:grid-cols-3">
                                     <label className="block">
-                                        <span className={labelClassName()}>科目</span>
-                                        <select name="subject" defaultValue="math" className={lineSelectClassName()}>
+                                        <span className={labelClassName()}>
+                                            科目
+                                        </span>
+                                        <select
+                                            name="subject"
+                                            defaultValue="math"
+                                            className={lineSelectClassName()}
+                                        >
                                             <option value="math">数学</option>
-                                            <option value="physics">物理</option>
-                                            <option value="chemistry">化学</option>
-                                            <option value="japanese">国語</option>
-                                            <option value="english">英語</option>
-                                            <option value="other">その他</option>
+                                            <option value="physics">
+                                                物理
+                                            </option>
+                                            <option value="chemistry">
+                                                化学
+                                            </option>
+                                            <option value="japanese">
+                                                国語
+                                            </option>
+                                            <option value="english">
+                                                英語
+                                            </option>
+                                            <option value="other">
+                                                その他
+                                            </option>
                                         </select>
                                     </label>
 
                                     <label className="block">
-                                        <span className={labelClassName()}>難易度</span>
+                                        <span className={labelClassName()}>
+                                            難易度
+                                        </span>
                                         <input
                                             name="difficulty"
                                             type="number"
@@ -154,20 +195,36 @@ export default async function ProblemRegistrationPage() {
                                     </label>
 
                                     <label className="block">
-                                        <span className={labelClassName()}>形式</span>
-                                        <select name="format" defaultValue="descriptive" className={lineSelectClassName()}>
-                                            <option value="descriptive">記述</option>
-                                            <option value="multiple">選択式</option>
+                                        <span className={labelClassName()}>
+                                            形式
+                                        </span>
+                                        <select
+                                            name="format"
+                                            defaultValue="descriptive"
+                                            className={lineSelectClassName()}
+                                        >
+                                            <option value="descriptive">
+                                                記述
+                                            </option>
+                                            <option value="multiple">
+                                                選択式
+                                            </option>
                                             <option value="short">短答</option>
-                                            <option value="set">セット問題</option>
+                                            <option value="set">
+                                                セット問題
+                                            </option>
                                         </select>
                                     </label>
                                 </div>
 
                                 <div className="block">
-                                    <span className={labelClassName()}>タグ</span>
+                                    <span className={labelClassName()}>
+                                        タグ
+                                    </span>
                                     <div className="mt-3">
-                                        <ProblemTagChipSelector options={tagOptions} />
+                                        <ProblemTagChipSelector
+                                            options={tagOptions}
+                                        />
                                     </div>
                                 </div>
                             </Section>
@@ -217,7 +274,9 @@ export default async function ProblemRegistrationPage() {
                                 description="出典情報は既存の source フィールドに保存されます。"
                             >
                                 <label className="block">
-                                    <span className={labelClassName()}>出典</span>
+                                    <span className={labelClassName()}>
+                                        出典
+                                    </span>
                                     <input
                                         name="source"
                                         className={lineFieldClassName()}
