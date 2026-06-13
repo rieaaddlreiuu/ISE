@@ -7,6 +7,7 @@ export type ProblemEditSectionId =
     | "hub"
     | "metadata"
     | "text"
+    | "commentary"
     | "assets"
     | "publish";
 
@@ -31,6 +32,12 @@ export function getProblemEditSections(problemId: string) {
             href: `/problems/${problemId}/edit/text`,
         },
         {
+            id: "commentary" as const,
+            label: "解説",
+            description: "edit / preview",
+            href: `/problems/${problemId}/edit/commentary`,
+        },
+        {
             id: "assets" as const,
             label: "画像",
             description: "添付画像と参照情報",
@@ -53,6 +60,7 @@ type ProblemEditShellProps = {
     meta: string;
     children: ReactNode;
     headerActions?: ReactNode;
+    wide?: boolean;
 };
 
 export function ProblemEditShell({
@@ -63,12 +71,18 @@ export function ProblemEditShell({
     meta,
     children,
     headerActions,
+    wide = false,
 }: ProblemEditShellProps) {
     const sections = getProblemEditSections(problemId);
 
     return (
         <main className="min-h-screen bg-[#f5f2ea] text-slate-900">
-            <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+            <div
+                className={[
+                    "mx-auto w-full px-4 py-8 sm:px-6 lg:px-8",
+                    wide ? "max-w-none" : "max-w-6xl",
+                ].join(" ")}
+            >
                 <PageHeader
                     backHref={`/problems/${problemId}`}
                     backLabel="問題詳細へ戻る"

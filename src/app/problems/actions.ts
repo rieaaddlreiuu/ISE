@@ -134,6 +134,21 @@ export async function saveProblemTextAction(
     redirect(`/problems/${problemId}`);
 }
 
+export async function saveProblemCommentaryAction(
+    problemId: string,
+    formData: FormData,
+) {
+    await prisma.problem.update({
+        where: { id: problemId },
+        data: {
+            explanationMd: readOptionalString(formData, "commentary"),
+        },
+    });
+
+    revalidatePath(`/problems/${problemId}`);
+    redirect(`/problems/${problemId}`);
+}
+
 export async function saveProblemPublishAction(
     problemId: string,
     formData: FormData,
